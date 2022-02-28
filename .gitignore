@@ -3,4 +3,5 @@
 ## 아래 내용은 포함하지 않습니다!
 build/
 out/
-resources/music/*
+resources/music/
+*.mp3
