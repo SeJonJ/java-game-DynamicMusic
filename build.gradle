@@ -1,0 +1,38 @@
+plugins {
+    id 'groovy'
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.codehaus.groovy:groovy-all:3.0.5'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+
+    // jlayer - java 에서 mp3
+    implementation 'javazoom:jlayer:1.0.1'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jar {
+    manifest { //패키지.패키지.메인클래스이름
+        attributes 'Main-Class': 'DynamicMusic.Main'
+    }
+
+    from {
+        configurations.runtimeClasspath.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+}
