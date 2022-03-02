@@ -1,7 +1,6 @@
 package DynamicMusic;
 
 
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -11,19 +10,16 @@ import java.util.ArrayList;
 
 public class DynamicMusic extends JFrame {
 
-    // 더블버퍼링 기술 사용 :
+    // 더블버퍼링 기술 사용
     private Image screenImage;
     private Graphics screenGraphic;
-
-//    String imgName = "resources/images/intro_background.jpg";
-//    InputStream in = getClass().getResourceAsStream(imgName);
 
     // ImageIcon 생성자를 이용해서 Main.class 에 있는 위치에서 리소스를 가져옴
     // 이후 다시 getter 를 이용해서 해당 이미지를 IntroBackground에 넣어줌
     // jar 파일로 만들때는 getClass.getResource 를 사용한다!
 
     // Background 객체는 이후 아래에서 화면이 전환될때 이곳에 다른 사진을 넣어서 배경경 사진 바뀔 수 있도록 함
-    // 1. menu background
+    // 시작화면 background
     private Image Background = new ImageIcon(getClass().getResource("/menu_images/intro_background.jpg")).getImage();
 
     // memuBar 객체 안에 memuBar 이미지가 들어가게 됨
@@ -48,6 +44,11 @@ public class DynamicMusic extends JFrame {
     private ImageIcon rightButtonBasic = new ImageIcon(getClass().getResource("/menu_images/rightBasic.png"));
     private ImageIcon rightButtonEntered = new ImageIcon(getClass().getResource("/menu_images/rightEntered.png"));
 
+    // 게임 난이도 설정 버튼
+    private ImageIcon easyButtonBasic = new ImageIcon(getClass().getResource("/menu_images/easyButtonBasic.png"));
+    private ImageIcon easyButtonEntered = new ImageIcon(getClass().getResource("/menu_images/easyButtonEntered.png"));
+    private ImageIcon hardButtonBasic = new ImageIcon(getClass().getResource("/menu_images/hardButtonBasic.png"));
+    private ImageIcon hardButtonEntered = new ImageIcon(getClass().getResource("/menu_images/hardButtonEntered.png"));
 
     // Button 생성
     private JButton exitButton = new JButton(exitButtonImage);
@@ -55,6 +56,8 @@ public class DynamicMusic extends JFrame {
     private JButton quitButton = new JButton(quitButtonBasic);
     private JButton leftButton = new JButton(leftButtonBasic);
     private JButton rightButton = new JButton(rightButtonBasic);
+    private JButton easyButton = new JButton(easyButtonBasic);
+    private JButton hardButton = new JButton(hardButtonBasic);
 
     // 윈도우 창 위치를 메뉴바를 끌어서 옮길 수 있도록
     private int MouseX, MouseY;
@@ -62,7 +65,7 @@ public class DynamicMusic extends JFrame {
     // 게임에 맞춰 화면을 표시하기 위한 변수
     private boolean isMainScreen = false;
 
-    // 어떠한 변수를 담을 수 있는 이미 만들어진 배열? => 하나의 음악의 정보를 배열로 담음
+    // ArrayList 어떠한 변수를 담을 수 있는 이미 만들어진 배열? => 하나의 음악의 정보를 배열로 담음
     ArrayList<Track> trackList = new ArrayList<Track>();
 
     // trackList 안에 있는 값에 따라서 아래 변수들의 값이 달라짐
@@ -88,14 +91,10 @@ public class DynamicMusic extends JFrame {
         Music Intromusic = new Music("introMusic_Joakim.mp3", true);
         Intromusic.start();
 
-        // 시작햇을 때는 왼쪽, 오른쪽 버튼은 보일 필요가 없음 =>setVisble(false)
-        rightButton.setVisible(false);
-        leftButton.setVisible(false);
-
         // trackList 에 track 정보 넣기
         trackList.add(new Track("DAYBREAK_FRONTLINE_title.png",
                 "DAYBREAK_FRONTLINE_menu.jpg",
-                "DAYBREAK_FRONTLINE_title_ingame.jpg",
+                "DAYBREAK_FRONTLINE_ingame.jpg",
                 "DAYBREAK_FRONTLINE_selected.mp3",
                 "DAYBREAK_FRONTLINE.mp3"));
 
@@ -129,6 +128,7 @@ public class DynamicMusic extends JFrame {
                 System.exit(0);
             }
         });
+
         // 게임 시작 버튼
         startButton.setBounds(800, 200, 400, 100);
         startButton.setBorderPainted(false);
@@ -157,11 +157,18 @@ public class DynamicMusic extends JFrame {
                 leftButton.setVisible(true);
                 rightButton.setVisible(true);
 
+                // 난이도 버튼 표시
+                easyButton.setVisible(true);
+                hardButton.setVisible(true);
+
+
                 // 인트로 음악 종료 및 track index 0 번재를 재생
                 Intromusic.close();
                 selectTrack(0);
 
+                // 여기는 게임 메인 화면에 들어갔을 때 배경화면
                 Background = new ImageIcon(getClass().getResource("/menu_images/main_Bakground.jpg")).getImage();
+
                 // 게임 시작을 누르면 isMainScreen 을 true 로
                 isMainScreen = true;
 
@@ -193,6 +200,7 @@ public class DynamicMusic extends JFrame {
         });
 
         // 왼쪽 이동 버튼
+        leftButton.setVisible(false);
         leftButton.setBounds(140, 310, 60, 60);
         leftButton.setBorderPainted(false);
         leftButton.setContentAreaFilled(false);
@@ -216,7 +224,8 @@ public class DynamicMusic extends JFrame {
             }
         });
 
-        // 오른쪽 이동 버튼
+        // 오른쪽 이동 버튼 : 시작햇을 때는 왼쪽, 오른쪽 버튼은 보일 필요가 없음 =>setVisble(false)
+        rightButton.setVisible(false);
         rightButton.setBounds(1040, 310, 60, 60);
         rightButton.setBorderPainted(false);
         rightButton.setContentAreaFilled(false);
@@ -240,13 +249,68 @@ public class DynamicMusic extends JFrame {
             }
         });
 
+        // easy 난이도 버튼
+        // 시작화면에서는 난이도버튼 보일 필요 없음
+        easyButton.setVisible(false);
+        easyButton.setBounds(375, 580, 250, 67);
+        easyButton.setBorderPainted(false);
+        easyButton.setContentAreaFilled(false);
+        easyButton.setFocusPainted(false);
+        easyButton.addMouseListener(new MouseAdapter() {
+            @Override // 버튼에 마무스 올렸을 때 이벤트
+            public void mouseEntered(MouseEvent e) {
+                easyButton.setIcon(easyButtonBasic);
+                easyButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
 
-//        버튼 추가
+            @Override // 버튼에 마우스 뗐을 때 이벤트
+            public void mouseExited(MouseEvent e) {
+                easyButton.setIcon(easyButtonEntered);
+                easyButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+
+            @Override // 마우스 눌렀을 때 이벤트
+            public void mousePressed(MouseEvent e) {
+                // 쉬움 난이도 이벤트
+                gameStart(nowSelected, "easy");
+            }
+        });
+
+        // hard 난이도 버튼
+        hardButton.setVisible(false);
+        hardButton.setBounds(655, 580, 250, 67);
+        hardButton.setBorderPainted(false);
+        hardButton.setContentAreaFilled(false);
+        hardButton.setFocusPainted(false);
+        hardButton.addMouseListener(new MouseAdapter() {
+            @Override // 버튼에 마무스 올렸을 때 이벤트
+            public void mouseEntered(MouseEvent e) {
+                hardButton.setIcon(hardButtonBasic);
+                hardButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override // 버튼에 마우스 뗐을 때 이벤트
+            public void mouseExited(MouseEvent e) {
+                hardButton.setIcon(hardButtonEntered);
+                hardButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+
+            @Override // 마우스 눌렀을 때 이벤트
+            public void mousePressed(MouseEvent e) {
+                // 어려움 난이도 이벤트
+                gameStart(nowSelected, "hard");
+            }
+        });
+
+
+        // 화면에 버튼 컴포넌트 추가
         add(exitButton);
         add(quitButton);
         add(startButton);
         add(rightButton);
         add(leftButton);
+        add(easyButton);
+        add(hardButton);
 
         menuBar.setBounds(0, 0, 1280, 30); // menuBar 의 위치와 크기
         menuBar.addMouseListener(new MouseAdapter() {
@@ -322,40 +386,56 @@ public class DynamicMusic extends JFrame {
             selectedMusic.close();
         }
 
-            // 현재 선택된 곡이 갖고 있는 noewSelected 번호를 갖고 아래의 각 정보를 가져옴
-            // 예를 들어서 arraylist 의 index 가 1이면 1에 해당하는 title, start, music 를 가져와서 뿌려줌
-            titleImage = new ImageIcon(getClass().getResource("/game_images/" +
-                    trackList.get(nowSelected).getTitleImage())).getImage();
-            selectedImage = new ImageIcon(getClass().getResource("/game_images/" +
-                    trackList.get(nowSelected).getMenuImage())).getImage();
+        // 현재 선택된 곡이 갖고 있는 noewSelected 번호를 갖고 아래의 각 정보를 가져옴
+        // 예를 들어서 arraylist 의 index 가 1이면 1에 해당하는 title, start, music 를 가져와서 뿌려줌
+        titleImage = new ImageIcon(getClass().getResource("/game_images/" +
+                trackList.get(nowSelected).getTitleImage())).getImage();
+        selectedImage = new ImageIcon(getClass().getResource("/game_images/" +
+                trackList.get(nowSelected).getMenuImage())).getImage();
 
 
-            selectedMusic = new Music(trackList.get(nowSelected).getStartMusic(), true);
-            selectedMusic.start();
-        }
-
-        // 왼쪽 버튼 메서드
-        public void selectLelft () {
-            // 0번째 곡일때는 전체 trackList 크기에서 -1 한다.
-            // 이는 0번째 곡일때 왼쪽을 누르면 track 에 있는 마지막 곡이 나오게 됨
-            if (nowSelected == 0) {
-                nowSelected = trackList.size() - 1;
-            } else { // 가장 왼쪽 아닐때는 현재 nowSelected 에서 -1
-                nowSelected--;
-            }
-            selectTrack(nowSelected);
-        }
-
-        // 오른쪽 버튼 메서드
-        public void selectRight () {
-            // 현재 곡이 track 의 가장 오른쪽에, 즉 마지막에 있는 곡이라면
-            // 가장 처음으로 돌아가도록
-            if (nowSelected == trackList.size() -1 ) {
-                nowSelected = 0;
-            } else { // 가장 오른쪽이 아닌 경우는 +1
-                nowSelected++;
-            }
-            selectTrack(nowSelected);
-        }
+        selectedMusic = new Music(trackList.get(nowSelected).getStartMusic(), true);
+        selectedMusic.start();
     }
+
+    // 왼쪽 버튼 메서드
+    public void selectLelft() {
+        // 0번째 곡일때는 전체 trackList 크기에서 -1 한다.
+        // 이는 0번째 곡일때 왼쪽을 누르면 track 에 있는 마지막 곡이 나오게 됨
+        if (nowSelected == 0) {
+            nowSelected = trackList.size() - 1;
+        } else { // 가장 왼쪽 아닐때는 현재 nowSelected 에서 -1
+            nowSelected--;
+        }
+        selectTrack(nowSelected);
+    }
+
+    // 오른쪽 버튼 메서드
+    public void selectRight() {
+        // 현재 곡이 track 의 가장 오른쪽에, 즉 마지막에 있는 곡이라면
+        // 가장 처음으로 돌아가도록
+        if (nowSelected == trackList.size() - 1) {
+            nowSelected = 0;
+        } else { // 가장 오른쪽이 아닌 경우는 +1
+            nowSelected++;
+        }
+        selectTrack(nowSelected);
+    }
+
+    public void gameStart(int nowSelected, String difficulty) {
+        // 현재 재생되고 있는 음악이 있다면 음악 종료
+        if (selectedMusic != null) {
+            selectedMusic.close();
+        }
+
+        // 메인 스크린을 false 로 => 이렇게되면 screenDraw 함수에서 isMainScreen 부분을 멈추게됨
+        isMainScreen = false;
+        leftButton.setVisible(false);
+        rightButton.setVisible(false);
+        easyButton.setVisible(false);
+        hardButton.setVisible(false);
+        Background = new ImageIcon(getClass().getResource("/game_images/"+trackList.get(nowSelected).getIngameImage())).getImage();
+
+    }
+}
 
