@@ -50,6 +50,10 @@ public class DynamicMusic extends JFrame {
     private ImageIcon hardButtonBasic = new ImageIcon(getClass().getResource("/menu_images/hardButtonBasic.png"));
     private ImageIcon hardButtonEntered = new ImageIcon(getClass().getResource("/menu_images/hardButtonEntered.png"));
 
+    // backButton : 메인 화면으로 돌아가는 버튼
+    private ImageIcon backButtonBasic = new ImageIcon(getClass().getResource("/menu_images/backButtonBasic.png"));
+    private ImageIcon backButtonEntered = new ImageIcon(getClass().getResource("/menu_images/backButtonEntered.png"));
+
     // Button 생성
     private JButton exitButton = new JButton(exitButtonImage);
     private JButton startButton = new JButton(startButtonBasic);
@@ -58,12 +62,29 @@ public class DynamicMusic extends JFrame {
     private JButton rightButton = new JButton(rightButtonBasic);
     private JButton easyButton = new JButton(easyButtonBasic);
     private JButton hardButton = new JButton(hardButtonBasic);
+    private JButton backButton = new JButton(backButtonBasic);
 
-    // 윈도우 창 위치를 메뉴바를 끌어서 옮길 수 있도록
+    // Ingame 게임 정보 표시를 위한 이미지
+    private Image gameInfoImage = new ImageIcon(getClass().getResource("/menu_images/gameInfo.png")).getImage();
+
+    // ingame 음악 노트 판정 배경
+    private Image judgementLineImage = new ImageIcon(getClass().getResource("/menu_images/judgementLine.png")).getImage();
+
+    // ingame 노트 경로 배경
+    private Image noteRouteImage = new ImageIcon(getClass().getResource("/menu_images/noteRoute.png")).getImage();
+
+    // ingame 노트 경로별 경계선(라인)
+    private Image noteRouteLine = new ImageIcon(getClass().getResource("/menu_images/noteRouteLine.png")).getImage();
+
+
+    // 윈도우 창 위치를 메뉴바를 끌어서 옮길 수 있도록 마우스 좌표 int
     private int MouseX, MouseY;
 
     // 게임에 맞춰 화면을 표시하기 위한 변수
     private boolean isMainScreen = false;
+
+    // Ingame 으로 넘어왔는지 확인하기 위한 변수수
+   private boolean isGameScreen = false;
 
     // ArrayList 어떠한 변수를 담을 수 있는 이미 만들어진 배열? => 하나의 음악의 정보를 배열로 담음
     ArrayList<Track> trackList = new ArrayList<Track>();
@@ -75,6 +96,8 @@ public class DynamicMusic extends JFrame {
     private Image titleImage;
     private Music selectedMusic;
 
+    // 인트로 음악 정의
+    private Music Intromusic = new Music("introMusic_Joakim.mp3", true);
 
     public void start() {
         setUndecorated(true); // 기본 메뉴바 삭제
@@ -87,9 +110,8 @@ public class DynamicMusic extends JFrame {
         setBackground(new Color(0, 0, 0, 0)); // paintcomponent 했을때 배경이 회색이 아니라 휜색으로 됨
         setLayout(null); // 버튼이나 JLabel 을 넣었을 때 그 위치 그대로 넣어짐
 
-        // 시작했을 때 바로는 인트로 음악이 나오도록록
-        Music Intromusic = new Music("introMusic_Joakim.mp3", true);
-        Intromusic.start();
+        // 게임 시작시 인트로 음악 재생생
+       Intromusic.start();
 
         // trackList 에 track 정보 넣기
         trackList.add(new Track("DAYBREAK_FRONTLINE_title.png",
@@ -149,29 +171,8 @@ public class DynamicMusic extends JFrame {
 
             @Override // 마우스 눌렀을 때 이벤트 => 즉 게임 시작버튼 눌렀을 때의 이벤트
             public void mousePressed(MouseEvent e) {
-                // 시작, 종료버튼 없애기
-                startButton.setVisible(false);
-                quitButton.setVisible(false);
-
-                //  left 와 right 버튼이 보이기
-                leftButton.setVisible(true);
-                rightButton.setVisible(true);
-
-                // 난이도 버튼 표시
-                easyButton.setVisible(true);
-                hardButton.setVisible(true);
-
-
-                // 인트로 음악 종료 및 track index 0 번재를 재생
-                Intromusic.close();
-                selectTrack(0);
-
-                // 여기는 게임 메인 화면에 들어갔을 때 배경화면
-                Background = new ImageIcon(getClass().getResource("/menu_images/main_Bakground.jpg")).getImage();
-
-                // 게임 시작을 누르면 isMainScreen 을 true 로
-                isMainScreen = true;
-
+                // 게임 메뉴 시작
+                game_menu();
             }
         });
 
@@ -302,6 +303,32 @@ public class DynamicMusic extends JFrame {
             }
         });
 
+        // hard 난이도 버튼
+        backButton.setVisible(false);
+        backButton.setBounds(20,50,60,60);
+        backButton.setBorderPainted(false);
+        backButton.setContentAreaFilled(false);
+        backButton.setFocusPainted(false);
+        backButton.addMouseListener(new MouseAdapter() {
+            @Override // 버튼에 마무스 올렸을 때 이벤트
+            public void mouseEntered(MouseEvent e) {
+                backButton.setIcon(backButtonBasic);
+                backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override // 버튼에 마우스 뗐을 때 이벤트
+            public void mouseExited(MouseEvent e) {
+                backButton.setIcon(backButtonEntered);
+                backButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+
+            @Override // 마우스 눌렀을 때 이벤트
+            public void mousePressed(MouseEvent e) {
+                // 메인 화면으로 돌아가는 이벤트
+                bakMain();
+            }
+        });
+
 
         // 화면에 버튼 컴포넌트 추가
         add(exitButton);
@@ -311,6 +338,7 @@ public class DynamicMusic extends JFrame {
         add(leftButton);
         add(easyButton);
         add(hardButton);
+        add(backButton);
 
         menuBar.setBounds(0, 0, 1280, 30); // menuBar 의 위치와 크기
         menuBar.addMouseListener(new MouseAdapter() {
@@ -372,6 +400,42 @@ public class DynamicMusic extends JFrame {
             g.drawImage(titleImage, 340, 85, null);
         }
 
+        // isGameScreen = true 인게임 화면에서의 그래픽
+        if(isGameScreen){
+            // 노트 경로 배경, 노트 경로별 경계선(라인)
+            g.drawImage(noteRouteLine, 224, 30, null);
+            g.drawImage(noteRouteImage, 228, 30, null);
+
+            g.drawImage(noteRouteLine, 328, 30, null);
+            g.drawImage(noteRouteImage, 332, 30, null);
+
+            g.drawImage(noteRouteLine, 432, 30, null);
+            g.drawImage(noteRouteImage, 436, 30, null);
+
+            g.drawImage(noteRouteLine, 536, 30, null);
+            g.drawImage(noteRouteImage, 540, 30, null);
+
+            g.drawImage(noteRouteLine, 740, 30, null);
+            g.drawImage(noteRouteImage, 640, 30, null);
+
+            g.drawImage(noteRouteLine, 844, 30, null);
+            g.drawImage(noteRouteImage, 744, 30, null);
+
+            g.drawImage(noteRouteLine, 948, 30, null);
+            g.drawImage(noteRouteImage, 848, 30, null);
+
+            g.drawImage(noteRouteLine, 1052, 30, null);
+            g.drawImage(noteRouteImage, 952, 30, null);
+
+
+            // ingame 시 게임 정보 표시를 위한 파란 줄
+            g.drawImage(gameInfoImage, 0, 660, null);
+
+            // 음악 노트판정을 위한 배경
+            g.drawImage(judgementLineImage, 0, 582, null);
+
+        }
+
         // paintComponents 는 이미지를 단순히 그려주는 것 이외에 JLabel 처럼 추가된 요소를 그리는 것
         // 즉 JFrame 위에 button 이나 라벨처럼 add() 된 부분에 대한 것
         paintComponents(g);
@@ -430,12 +494,70 @@ public class DynamicMusic extends JFrame {
 
         // 메인 스크린을 false 로 => 이렇게되면 screenDraw 함수에서 isMainScreen 부분을 멈추게됨
         isMainScreen = false;
+
+        // Ingame 전환 확인
+        isGameScreen = true;
+
+        // 버튼 안보이게
         leftButton.setVisible(false);
         rightButton.setVisible(false);
         easyButton.setVisible(false);
         hardButton.setVisible(false);
-        Background = new ImageIcon(getClass().getResource("/game_images/"+trackList.get(nowSelected).getIngameImage())).getImage();
 
+        // 뒤로 돌아가기 버튼
+        backButton.setVisible(true);
+
+        // 백그라운드 이미지가 ingame 이미지로 바뀌어야함
+        Background = new ImageIcon(getClass().getResource("/game_images/"+trackList.get(nowSelected).getIngameImage())).getImage();
+    }
+
+    public void bakMain(){
+        // 메인 화면일때는 isMainScreen 이 true, GameScreen 은 false
+        isMainScreen = true;
+        isGameScreen = false;
+
+
+        // 메인화면으로 돌아오면 다시 버튼 보이게
+        leftButton.setVisible(true);
+        rightButton.setVisible(true);
+        easyButton.setVisible(true);
+        hardButton.setVisible(true);
+
+        // 뒤로 돌아가기 버튼
+        backButton.setVisible(false);
+
+        // 다시 트랙 선택
+        selectTrack(nowSelected);
+
+        // 백그라운드 이미지가 track 의 nowSelected 에 맞는 이미지로
+        Background = new ImageIcon(getClass().getResource("/menu_images/main_Bakground.jpg")).getImage();
+
+    }
+
+    public void game_menu(){
+        // 시작, 종료버튼 없애기
+        startButton.setVisible(false);
+        quitButton.setVisible(false);
+
+        // 여기는 게임 메인 화면에 들어갔을 때 배경화면
+        Background = new ImageIcon(getClass().getResource("/menu_images/main_Bakground.jpg")).getImage();
+
+        // 게임 시작을 누르면 isMainScreen 을 true 로
+        isMainScreen = true;
+
+        //  left 와 right 버튼이 보이기
+        leftButton.setVisible(true);
+        rightButton.setVisible(true);
+
+        // 난이도 버튼 표시
+        easyButton.setVisible(true);
+        hardButton.setVisible(true);
+
+        // nowselected 번째 index 재생
+        selectTrack(0);
+
+        // 인트로 음악 종료
+        Intromusic.close();
     }
 }
 
