@@ -3,8 +3,8 @@
 ## 아래 내용은 포함하지 않습니다!
 build/
 out/
-resources/game_images
-resources/game_music
-resources/menu_music
+resources/game_images/
+resources/game_music/
+resources/menu_music/
 
 *.mp3
