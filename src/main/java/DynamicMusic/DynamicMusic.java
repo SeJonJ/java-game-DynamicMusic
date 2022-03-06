@@ -64,17 +64,6 @@ public class DynamicMusic extends JFrame {
     private JButton hardButton = new JButton(hardButtonBasic);
     private JButton backButton = new JButton(backButtonBasic);
 
-    // Ingame 게임 정보 표시를 위한 이미지
-    private Image gameInfoImage = new ImageIcon(getClass().getResource("/menu_images/gameInfo.png")).getImage();
-
-    // ingame 음악 노트 판정 배경
-    private Image judgementLineImage = new ImageIcon(getClass().getResource("/menu_images/judgementLine.png")).getImage();
-
-    // ingame 노트 경로 배경
-    private Image noteRouteImage = new ImageIcon(getClass().getResource("/menu_images/noteRoute.png")).getImage();
-
-    // ingame 노트 경로별 경계선(라인)
-    private Image noteRouteLine = new ImageIcon(getClass().getResource("/menu_images/noteRouteLine.png")).getImage();
 
 
     // 윈도우 창 위치를 메뉴바를 끌어서 옮길 수 있도록 마우스 좌표 int
@@ -97,7 +86,12 @@ public class DynamicMusic extends JFrame {
     private Music selectedMusic;
 
     // 인트로 음악 정의
-    private Music Intromusic = new Music("introMusic_Joakim.mp3", true);
+    private Music Intromusic = new Music("Intro_Elektronomia_Energy.mp3", true, "menu");
+
+    // Game 인스턴스 생성 && 초기화 :
+    // 이때 game 변수는 단 하나의 게임만 진행가능하며 game 변수자체가 프로젝트 전체에서 사용되어야하기 때문에
+    // static 으로 만들어줌
+    public static Game game = new Game();
 
     public void start() {
         setUndecorated(true); // 기본 메뉴바 삭제
@@ -109,6 +103,9 @@ public class DynamicMusic extends JFrame {
         setVisible(true); // 창 보이는 여부 => 반드시 true
         setBackground(new Color(0, 0, 0, 0)); // paintcomponent 했을때 배경이 회색이 아니라 휜색으로 됨
         setLayout(null); // 버튼이나 JLabel 을 넣었을 때 그 위치 그대로 넣어짐
+
+        // add해서 KeyListener 에 내가 만든 KeyListen 인식
+        addKeyListener(new KeyListener());
 
         // 게임 시작시 인트로 음악 재생생
        Intromusic.start();
@@ -381,13 +378,13 @@ public class DynamicMusic extends JFrame {
         screenGraphic = screenImage.getGraphics(); // screenImage 를 이용해서 그래픽 객체를 얻어옴
 //        System.out.println("a");
         // screenGraphic 에 그림을 그려주게됨 , 그래픽에 화면에 이미지를 그린다? 라는 느낌? => 이때 screenDraw 메서드를 통해 화면을 그림(Draw)
-        screenDraw(screenGraphic);
+        screenDraw((Graphics2D) screenGraphic); // 그래픽스 2D 로 형변환
 //        System.out.println("b");
         // 0,0 인 이유는 이미 screenImage 가 이미 화면 크기 그대로 이기 때문에 0,0에 띄워주는 것
         g.drawImage(screenImage, 0, 0, null); // 윈도우 창에 screenImage 를 뿌려줌
     }
 
-    public void screenDraw(Graphics g) {
+    public void screenDraw(Graphics2D g) { // 매개변수를 Graphics 에서 Graphics2D 로 변경
 //        System.out.println("c");
         // drawImage 메서드를 Introbackground 를  x, y 좌표에 그려줌
         // g.drawImage 부분은 paintComponents 처럼 화면에 추가된 요소를 그려주는 것이 아닌 단순히
@@ -401,39 +398,9 @@ public class DynamicMusic extends JFrame {
         }
 
         // isGameScreen = true 인게임 화면에서의 그래픽
+        // ingame 에 관한 그래픽 내용은 Game 클래스에서 관리
         if(isGameScreen){
-            // 노트 경로 배경, 노트 경로별 경계선(라인)
-            g.drawImage(noteRouteLine, 224, 30, null);
-            g.drawImage(noteRouteImage, 228, 30, null);
-
-            g.drawImage(noteRouteLine, 328, 30, null);
-            g.drawImage(noteRouteImage, 332, 30, null);
-
-            g.drawImage(noteRouteLine, 432, 30, null);
-            g.drawImage(noteRouteImage, 436, 30, null);
-
-            g.drawImage(noteRouteLine, 536, 30, null);
-            g.drawImage(noteRouteImage, 540, 30, null);
-
-            g.drawImage(noteRouteLine, 740, 30, null);
-            g.drawImage(noteRouteImage, 640, 30, null);
-
-            g.drawImage(noteRouteLine, 844, 30, null);
-            g.drawImage(noteRouteImage, 744, 30, null);
-
-            g.drawImage(noteRouteLine, 948, 30, null);
-            g.drawImage(noteRouteImage, 848, 30, null);
-
-            g.drawImage(noteRouteLine, 1052, 30, null);
-            g.drawImage(noteRouteImage, 952, 30, null);
-
-
-            // ingame 시 게임 정보 표시를 위한 파란 줄
-            g.drawImage(gameInfoImage, 0, 660, null);
-
-            // 음악 노트판정을 위한 배경
-            g.drawImage(judgementLineImage, 0, 582, null);
-
+            game.screeenDraw(g);
         }
 
         // paintComponents 는 이미지를 단순히 그려주는 것 이외에 JLabel 처럼 추가된 요소를 그리는 것
@@ -458,7 +425,7 @@ public class DynamicMusic extends JFrame {
                 trackList.get(nowSelected).getMenuImage())).getImage();
 
 
-        selectedMusic = new Music(trackList.get(nowSelected).getStartMusic(), true);
+        selectedMusic = new Music(trackList.get(nowSelected).getStartMusic(), true, "game");
         selectedMusic.start();
     }
 
@@ -509,6 +476,11 @@ public class DynamicMusic extends JFrame {
 
         // 백그라운드 이미지가 ingame 이미지로 바뀌어야함
         Background = new ImageIcon(getClass().getResource("/game_images/"+trackList.get(nowSelected).getIngameImage())).getImage();
+
+        // 키보드 이벤트 동작을 위한 메서드
+        // 이는 Main 클래스에 포커스가 맞춰져있어야 키보드 이벤트가 정상적으로 동작하기 때문
+        setFocusable(true);
+        requestFocus();
     }
 
     public void bakMain(){

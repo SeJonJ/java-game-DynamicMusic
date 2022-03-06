@@ -3,8 +3,6 @@ package DynamicMusic;
 import javazoom.jl.player.Player;
 
 import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 
 
@@ -12,20 +10,32 @@ public class Music extends Thread{
 
     private Player player; // mp3 를 재생해주는 클래스
     private boolean isLoop; // 음악의 무한 루프 확인
-    private File file; // 파일을 가져오는 클래스
-    private FileInputStream fileInputStream;
     private BufferedInputStream bufferedInputStream;
 
-    public Music(String name, boolean isLoop) {
-        try {
+//    private File file; // 파일을 가져오는 클래스
+//    private FileInputStream fileInputStream;
 
+    // 음악 mp3 파일 이름, 음악 반복재생 여부, 게임관련 음악인지 메뉴 관련 음악인지 여부
+    public Music(String name, boolean isLoop, String mod) {
+        try {
             this.isLoop = isLoop; // isLoop 초기화
 
             // 음악 파일을 inputstream 에 넣어서 가져옴
-            InputStream input = Music.class.getClassLoader().getResourceAsStream("music/" + name);
-            bufferedInputStream = new BufferedInputStream(input); // 이후 다시 버퍼에 담아서 읽어 올 수 있도록
+            // game 관련 음악이면 game_music 에서 , menu 관련 음악이면 menu_music 에서 출력됨
+            if(mod == "game"){
 
-            player = new Player(bufferedInputStream); // 최종적으로 player 인스턴스는 버퍼에 담긴 음악 파일을 갖음
+                InputStream input = Music.class.getClassLoader().getResourceAsStream("game_music/" + name);
+
+                bufferedInputStream = new BufferedInputStream(input); // 이후 다시 버퍼에 담아서 읽어 올 수 있도록
+                player = new Player(bufferedInputStream); // 최종적으로 player 인스턴스는 버퍼에 담긴 음악 파일을 갖음
+
+            }else if(mod == "menu"){
+
+                InputStream input = Music.class.getClassLoader().getResourceAsStream("menu_music/" + name);
+                bufferedInputStream = new BufferedInputStream(input); // 이후 다시 버퍼에 담아서 읽어 올 수 있도록
+
+                player = new Player(bufferedInputStream); // 최종적으로 player 인스턴스는 버퍼에 담긴 음악 파일을 갖음
+            }
 
         }catch (Exception e){
             System.out.println(e.getMessage());
