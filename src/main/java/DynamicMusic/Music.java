@@ -22,14 +22,14 @@ public class Music extends Thread{
 
             // 음악 파일을 inputstream 에 넣어서 가져옴
             // game 관련 음악이면 game_music 에서 , menu 관련 음악이면 menu_music 에서 출력됨
-            if(mod == "game"){
+            if(mod.equals("game")){
 
                 InputStream input = Music.class.getClassLoader().getResourceAsStream("game_music/" + name);
 
                 bufferedInputStream = new BufferedInputStream(input); // 이후 다시 버퍼에 담아서 읽어 올 수 있도록
                 player = new Player(bufferedInputStream); // 최종적으로 player 인스턴스는 버퍼에 담긴 음악 파일을 갖음
 
-            }else if(mod == "menu"){
+            }else if(mod.equals("menu")){
 
                 InputStream input = Music.class.getClassLoader().getResourceAsStream("menu_music/" + name);
                 bufferedInputStream = new BufferedInputStream(input); // 이후 다시 버퍼에 담아서 읽어 올 수 있도록

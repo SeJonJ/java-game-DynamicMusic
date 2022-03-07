@@ -6,11 +6,15 @@ public class Main {
     public static final int SCREEN_WIDTH = 1280;
     public static final int SCREEN_HEIGHT = 720;
 
+    // 떨어지는 노트 속도
+    public static final int NOTE_SPEED = 7;
+
+    // 노트가 떨어지는 시간 주기
+    public static final int SLEEP_TIME = 10;
+
     public static void main(String[] args){
 
-        DynamicMusic dynamicMusic = new DynamicMusic();
-        dynamicMusic.start();
-
+        new DynamicMusic().start();
 
         System.out.println("실행 완료");
     }

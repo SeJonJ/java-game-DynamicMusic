@@ -10,15 +10,17 @@ public class Track {
     private String ingameImage; // 해당 곡을 실행했을 때 표지 이미지
     private String startMusic; // 게임 실행 했을 때 이미지
     private String gameMusic; // 해당 곡을 실행햇을 때 음악
+    private String titleName; // 해당 곡 제목 확인
+    private String diffiCulity; // 해당 곡 난이도 확인
 
-    public Track(String titleImage, String menuImage, String ingameImage, String startMusic, String gameMusic){
+    public Track(String titleImage, String menuImage, String ingameImage, String startMusic, String gameMusic, String titleName){
         super(); // 아무것도 상속받지 않은 클래스의 super 클래스 즉 상위 클래스는 Object 클래스가 됨
         this.titleImage = titleImage;
         this.menuImage = menuImage;
         this.ingameImage = ingameImage;
         this.startMusic = startMusic;
         this.gameMusic = gameMusic;
-
+        this.titleName = titleName;
     }
 
     public String getTitleImage() {
@@ -60,7 +62,12 @@ public class Track {
         this.gameMusic = gameMusic;
     }
 
+    public String getTitleName() {
+        return titleName;
+    }
 
-
+    public void setTitleName(String titleName) {
+        this.titleName = titleName;
+    }
 
 }

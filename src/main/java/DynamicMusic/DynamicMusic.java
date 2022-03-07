@@ -91,7 +91,7 @@ public class DynamicMusic extends JFrame {
     // Game 인스턴스 생성 && 초기화 :
     // 이때 game 변수는 단 하나의 게임만 진행가능하며 game 변수자체가 프로젝트 전체에서 사용되어야하기 때문에
     // static 으로 만들어줌
-    public static Game game = new Game();
+    public static Game game;
 
     public void start() {
         setUndecorated(true); // 기본 메뉴바 삭제
@@ -115,13 +115,15 @@ public class DynamicMusic extends JFrame {
                 "DAYBREAK_FRONTLINE_menu.jpg",
                 "DAYBREAK_FRONTLINE_ingame.jpg",
                 "DAYBREAK_FRONTLINE_selected.mp3",
-                "DAYBREAK_FRONTLINE.mp3"));
+                "DAYBREAK_FRONTLINE.mp3",
+                "DAYBREAK FRONTLINE"));
 
         trackList.add(new Track("Eminem_Lose_Yourself_title.png",
                 "Eminem_Lose_Yourself_menu.jpg",
                 "Eminem_Lose_Yourself_ingame.jpg",
                 "Eminem_Lose_Yourself_selected.mp3",
-                "Eminem_Lose_Yourself.mp3"));
+                "Eminem_Lose_Yourself.mp3",
+                "Lose Yourself - Eminem"));
 
 
         // exitButton
@@ -129,6 +131,10 @@ public class DynamicMusic extends JFrame {
         exitButton.setBorderPainted(false);
         exitButton.setContentAreaFilled(false);
         exitButton.setFocusPainted(false);
+
+        // 아래처럼 추상 클래스, 인터페이스등을 상속, 구현하는 클래스를 직접 생성한는 것 대신
+        // { ~~~ } 를 통해 생성하는 것을 익명 클래스라고 함
+        // 즉 new MouseAdapter() 뒤에 부분은 익명클래스로 MouseAdapter() 를 구현한 클래스로 취급됨
         exitButton.addMouseListener(new MouseAdapter() {
             @Override // 버튼에 마무스 올렸을 때 이벤트
             public void mouseEntered(MouseEvent e) {
@@ -179,7 +185,7 @@ public class DynamicMusic extends JFrame {
         quitButton.setContentAreaFilled(false);
         quitButton.setFocusPainted(false);
         quitButton.addMouseListener(new MouseAdapter() {
-            @Override // 버튼에 마무스 올렸을 때 이벤트
+            @Override // 버튼에 마우스 올렸을 때 이벤트
             public void mouseEntered(MouseEvent e) {
                 quitButton.setIcon(quitButtonEntered);
                 quitButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -270,7 +276,7 @@ public class DynamicMusic extends JFrame {
             @Override // 마우스 눌렀을 때 이벤트
             public void mousePressed(MouseEvent e) {
                 // 쉬움 난이도 이벤트
-                gameStart(nowSelected, "easy");
+                gameStart(nowSelected, "Easy");
             }
         });
 
@@ -296,7 +302,7 @@ public class DynamicMusic extends JFrame {
             @Override // 마우스 눌렀을 때 이벤트
             public void mousePressed(MouseEvent e) {
                 // 어려움 난이도 이벤트
-                gameStart(nowSelected, "hard");
+                gameStart(nowSelected, "Hard");
             }
         });
 
@@ -465,6 +471,9 @@ public class DynamicMusic extends JFrame {
         // Ingame 전환 확인
         isGameScreen = true;
 
+        // 게임 시작 시 해당 선택된 곡 이름과 난이도 가져옴
+        game = new Game(trackList.get(nowSelected).getTitleName(), difficulty, trackList.get(nowSelected).getGameMusic());
+
         // 버튼 안보이게
         leftButton.setVisible(false);
         rightButton.setVisible(false);
@@ -504,6 +513,8 @@ public class DynamicMusic extends JFrame {
         // 백그라운드 이미지가 track 의 nowSelected 에 맞는 이미지로
         Background = new ImageIcon(getClass().getResource("/menu_images/main_Bakground.jpg")).getImage();
 
+        // 메뉴로 돌아왔을 때 게임 종료
+        game.Close();
     }
 
     public void game_menu(){

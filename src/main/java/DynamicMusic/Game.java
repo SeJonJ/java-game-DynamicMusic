@@ -2,6 +2,7 @@ package DynamicMusic;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 // 스레들는 프로그램 안에 있는 작은 프로그램
 public class Game extends Thread {
@@ -10,8 +11,6 @@ public class Game extends Thread {
     // 즉 게임 클래스의 인스턴스가 생성되어 실행되면 아래 run() 메소드가 실행됨
 
 
-    //노트 이미지
-    private Image noteBasicImage = new ImageIcon(getClass().getResource("/menu_images/noteBasic.png")).getImage();
 
     // ingame 노트 경로별 경계선(라인)
     private Image noteRouteLine = new ImageIcon(getClass().getResource("/menu_images/noteRouteLine.png")).getImage();
@@ -36,6 +35,24 @@ public class Game extends Thread {
     private Image K_noteRouteImage = new ImageIcon(getClass().getResource("/menu_images/noteRoute.png")).getImage();
     private Image L_noteRouteImage = new ImageIcon(getClass().getResource("/menu_images/noteRoute.png")).getImage();
 
+    // 게임 실행 시 그 게임에 맞는 음악을 플레이하기 위한 변수
+    private String titleName;
+    private String diffiCulity;
+    private String selectedMusic;
+    private Music gameMusic;
+
+    public Game(String titleName, String diffiCulity, String selectedMusic){
+        this.titleName = titleName;
+        this.diffiCulity = diffiCulity;
+        this.selectedMusic = selectedMusic;
+        gameMusic = new Music(this.selectedMusic, false, "game");
+        gameMusic.start();
+
+        // 노트 출력
+        dropNote(titleName);
+    }
+    // 음악 노트를 개별적으로 관리할 ArrayList
+    ArrayList<Note> noteList = new ArrayList<Note>();
 
     public void screeenDraw(Graphics2D g){
         // INGAME 노트 경로 배경, 노트 경로별 경계선(라인), 어떤키 사용하는지, 점수 등 => 총 7키
@@ -68,14 +85,15 @@ public class Game extends Thread {
         g.drawImage(noteRouteLine, 1052, 30, null);
         g.drawImage(L_noteRouteImage, 952, 30, null);
 
-        g.drawImage(noteBasicImage, 228, 120, null);
-        g.drawImage(noteBasicImage, 332, 580, null);
-        g.drawImage(noteBasicImage, 436, 500, null);
-        g.drawImage(noteBasicImage, 540, 340, null);
-        g.drawImage(noteBasicImage, 640, 340, null);
-        g.drawImage(noteBasicImage, 744, 325, null);
-        g.drawImage(noteBasicImage, 848, 305, null);
-        g.drawImage(noteBasicImage, 952, 305, null);
+
+        // noteList 에는 note 위치 - x, y - 가 저장되어 있음
+        // for 문을 통해 noteList 안에 있는 내용을 하나하나 꺼내오면서 반복 출력
+        // 반복 출력되면서 Graph 으로 만듦
+        for(int i=0; i<noteList.size(); i++){
+            Note note = noteList.get(i);
+            note.screenDraw(g);
+        }
+
 
         // 글씨 색깔 설정
         g.setColor(Color.white);
@@ -86,9 +104,9 @@ public class Game extends Thread {
         // 폰트설정 : 아래 나오는 텍스트에 폰트 적용
         g.setFont(new Font("Arial",Font.BOLD,30));
         // ingame 에서 노래 제목 출력
-        g.drawString("DAYBREAK FRONTLINE",20,702);
+        g.drawString(titleName, 20, 702);
         // ingame 에서 노래 난이도 출력
-        g.drawString("EASY",1190,700);
+        g.drawString(diffiCulity, 1190, 700);
         // 게임 점수 출력
         g.drawString("000000",565,702);
 
@@ -107,6 +125,7 @@ public class Game extends Thread {
 
         // 음악 노트판정을 위한 배경
         g.drawImage(judgementLineImage, 0, 580, null);
+
     }
 
     // press 메서드 : 해당 버튼을 눌렀을 때 이미지변경
@@ -176,5 +195,32 @@ public class Game extends Thread {
     @Override
     public void run(){
 
+    }
+
+    public void Close(){
+        // 게임 음악 종료
+        gameMusic.close();
+        // 스레드 종료
+        this.interrupt();
+    }
+
+    // 노트를 떨어뜨리게 - 내려오게 - 만드는 메소드
+    public void dropNote(String titleName){
+        Note note = new Note(228, "short");
+
+        note.start();
+
+        // 위에서 만들어진 note 를 noteList에 넣음
+        // note 에는 Thread 가 달려있고, note가 실행되면 Thread 가 같이 실행됨
+        // Dynamic Music 클래스에서 screenDraw 가 실행되면서 for문 noteList가 돌게 됨
+        // 전체 반복복
+        noteList.add(note);
+//        noteList.add(new Note(228, 120, "short"));
+//        noteList.add(new Note(332, 580, "short"));
+//        noteList.add(new Note(436, 500, "short"));
+//        noteList.add(new Note(540, 540, "long"));
+//        noteList.add(new Note(744, 325, "short"));
+//        noteList.add(new Note(848, 305, "short"));
+//        noteList.add(new Note(952, 305, "short"));
     }
 }
