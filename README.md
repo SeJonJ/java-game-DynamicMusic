@@ -38,9 +38,15 @@ https://www.youtube.com/playlist?list=PLRx0vPvlEmdDySO3wDqMYGKMVH4Qa4QhR
 
 7. 키보드 눌렀을 때 해당 키보드 이벤트 출력, 키보드별 음악 재생
 
+8. 노트 판정 기능 : 노트 판정 시 이미지, 판정 별 이미지 등
+
 ## 앞으로의 목표
 
-1. 음악 선택 후 게임 진행하는 부분 - 노트 판정 등 -
+1. 노트를 쉽게 만들기 위한 index 메서드 수정 -> 추후 jar 파일에서도 동작 가능하도록
+
+2. 게임 score 점수 표시
+
+3. exe 파일로 실행 가능하도록 or 추후 My web 과 연동가능하도록
 
 ## 주의점
 - 해당 코드에는 /resources/game_music 및 menu_music , game_image 부분이 빠져있습니다. 이는 저작권에 맞는 음악을 사용한게 아니라 제가 좋아하는 노래들로 다운받아서 넣어두었기 때문입니다.

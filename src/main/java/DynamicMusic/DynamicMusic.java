@@ -94,6 +94,21 @@ public class DynamicMusic extends JFrame {
     public static Game game;
 
     public void start() {
+        // trackList 에 track 정보 넣기
+        trackList.add(new Track("DAYBREAK_FRONTLINE_title.png",
+                "DAYBREAK_FRONTLINE_menu.jpg",
+                "DAYBREAK_FRONTLINE_ingame_image.jpg",
+                "DAYBREAK_FRONTLINE_selected.mp3",
+                "DAYBREAK_FRONTLINE.mp3",
+                "DAYBREAK FRONTLINE"));
+
+        trackList.add(new Track("Eminem_Lose_Yourself_title_new.jpg",
+                "Eminem_Lose_Yourself_menu.jpg",
+                "Eminem_Lose_Yourself_ingame.jpg",
+                "Eminem_Lose_Yourself_selected.mp3",
+                "Eminem_Lose_Yourself.mp3",
+                "Lose Yourself - Eminem"));
+
         setUndecorated(true); // 기본 메뉴바 삭제
         setTitle("Dynamic Music");
         setSize(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT);
@@ -110,20 +125,6 @@ public class DynamicMusic extends JFrame {
         // 게임 시작시 인트로 음악 재생생
        Intromusic.start();
 
-        // trackList 에 track 정보 넣기
-        trackList.add(new Track("DAYBREAK_FRONTLINE_title.png",
-                "DAYBREAK_FRONTLINE_menu.jpg",
-                "DAYBREAK_FRONTLINE_ingame.jpg",
-                "DAYBREAK_FRONTLINE_selected.mp3",
-                "DAYBREAK_FRONTLINE.mp3",
-                "DAYBREAK FRONTLINE"));
-
-        trackList.add(new Track("Eminem_Lose_Yourself_title.png",
-                "Eminem_Lose_Yourself_menu.jpg",
-                "Eminem_Lose_Yourself_ingame.jpg",
-                "Eminem_Lose_Yourself_selected.mp3",
-                "Eminem_Lose_Yourself.mp3",
-                "Lose Yourself - Eminem"));
 
 
         // exitButton
@@ -283,6 +284,7 @@ public class DynamicMusic extends JFrame {
         // hard 난이도 버튼
         hardButton.setVisible(false);
         hardButton.setBounds(655, 580, 250, 67);
+//        hardButton.setBounds(900, 350, 250, 67);
         hardButton.setBorderPainted(false);
         hardButton.setContentAreaFilled(false);
         hardButton.setFocusPainted(false);
@@ -412,6 +414,11 @@ public class DynamicMusic extends JFrame {
         // paintComponents 는 이미지를 단순히 그려주는 것 이외에 JLabel 처럼 추가된 요소를 그리는 것
         // 즉 JFrame 위에 button 이나 라벨처럼 add() 된 부분에 대한 것
         paintComponents(g);
+        try{
+            Thread.sleep(5);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
         this.repaint();
 //        System.out.println("d");
     }
@@ -473,6 +480,9 @@ public class DynamicMusic extends JFrame {
 
         // 게임 시작 시 해당 선택된 곡 이름과 난이도 가져옴
         game = new Game(trackList.get(nowSelected).getTitleName(), difficulty, trackList.get(nowSelected).getGameMusic());
+
+        // game 인스턴스 안에 있는 run 함수 실행
+        game.start();
 
         // 버튼 안보이게
         leftButton.setVisible(false);

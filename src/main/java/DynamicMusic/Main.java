@@ -12,6 +12,9 @@ public class Main {
     // 노트가 떨어지는 시간 주기
     public static final int SLEEP_TIME = 10;
 
+    // 노트가 생성 된 후 판정바에 도달하기까지 시간
+    public static final int REACH_TIME = 1;
+
     public static void main(String[] args){
 
         new DynamicMusic().start();

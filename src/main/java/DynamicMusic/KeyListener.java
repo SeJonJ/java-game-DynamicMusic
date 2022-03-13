@@ -42,10 +42,13 @@ public class KeyListener extends KeyAdapter {
 
     @Override
     public void keyReleased(KeyEvent e) {
-
+        
         if(DynamicMusic.game == null){
             return;
         }
+        
+        // 여기서 사용되는 e.getKeyCode() 는 키보드의 아스키 코드값을 가져옴
+        // KeyEvent.VK_% 도 출력해보면 해당 글자, 숫자의 아스키 코드값이 출력됨
         if(e.getKeyCode() == KeyEvent.VK_A){
             DynamicMusic.game.releaseA();
         }
