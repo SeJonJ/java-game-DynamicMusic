@@ -54,6 +54,10 @@ public class DynamicMusic extends JFrame {
     private ImageIcon backButtonBasic = new ImageIcon(getClass().getResource("/menu_images/backButtonBasic.png"));
     private ImageIcon backButtonEntered = new ImageIcon(getClass().getResource("/menu_images/backButtonEntered.png"));
 
+    // 노트 찍기 모드
+    private ImageIcon noteWriteMod = new ImageIcon(getClass().getResource("/menu_images/noteWirteMod.png"));
+
+
     // Button 생성
     private JButton exitButton = new JButton(exitButtonImage);
     private JButton startButton = new JButton(startButtonBasic);
@@ -63,6 +67,7 @@ public class DynamicMusic extends JFrame {
     private JButton easyButton = new JButton(easyButtonBasic);
     private JButton hardButton = new JButton(hardButtonBasic);
     private JButton backButton = new JButton(backButtonBasic);
+    private JButton noteWriteButton = new JButton(noteWriteMod);
 
 
 
@@ -122,10 +127,8 @@ public class DynamicMusic extends JFrame {
         // add해서 KeyListener 에 내가 만든 KeyListen 인식
         addKeyListener(new KeyListener());
 
-        // 게임 시작시 인트로 음악 재생생
+        // 게임 시작시 인트로 음악 재생
        Intromusic.start();
-
-
 
         // exitButton
         exitButton.setBounds(1245, 0, 30, 30); // 왼쪽부터 x, y , 길이, 높이
@@ -308,7 +311,7 @@ public class DynamicMusic extends JFrame {
             }
         });
 
-        // hard 난이도 버튼
+        // back 버튼
         backButton.setVisible(false);
         backButton.setBounds(20,50,60,60);
         backButton.setBorderPainted(false);
@@ -334,6 +337,9 @@ public class DynamicMusic extends JFrame {
             }
         });
 
+        // 노트 모드 시 찍기 버튼
+        noteWriteButton.setVisible(false);
+        noteWriteButton.setBounds(1070,150,200,70);
 
         // 화면에 버튼 컴포넌트 추가
         add(exitButton);
@@ -344,6 +350,7 @@ public class DynamicMusic extends JFrame {
         add(easyButton);
         add(hardButton);
         add(backButton);
+        add(noteWriteButton);
 
         menuBar.setBounds(0, 0, 1280, 30); // menuBar 의 위치와 크기
         menuBar.addMouseListener(new MouseAdapter() {
@@ -496,6 +503,11 @@ public class DynamicMusic extends JFrame {
         // 백그라운드 이미지가 ingame 이미지로 바뀌어야함
         Background = new ImageIcon(getClass().getResource("/game_images/"+trackList.get(nowSelected).getIngameImage())).getImage();
 
+        // 노트 찍기 모드 일때는 해당 이미지 추가
+        // noteMaker = true 일 때만 버튼 보이게
+        if(Game.noteMaker) {
+            noteWriteButton.setVisible(true);
+        }
         // 키보드 이벤트 동작을 위한 메서드
         // 이는 Main 클래스에 포커스가 맞춰져있어야 키보드 이벤트가 정상적으로 동작하기 때문
         setFocusable(true);
@@ -516,6 +528,11 @@ public class DynamicMusic extends JFrame {
 
         // 뒤로 돌아가기 버튼
         backButton.setVisible(false);
+
+        // 노트 찍기 버튼
+        if(Game.noteMaker){
+            noteWriteButton.setVisible(false);
+        }
 
         // 다시 트랙 선택
         selectTrack(nowSelected);

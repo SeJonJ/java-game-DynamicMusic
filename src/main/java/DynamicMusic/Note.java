@@ -80,7 +80,7 @@ public class Note extends Thread{
         // 노트가 떨어진다 -> 노트가 아래로 움직인다 -> y 축으로 일정한 좌표만큼 움직인다
         y += Main.NOTE_SPEED;
         if(y>620){ // y 좌표가 620 이상이라면 Miss 판정
-            System.out.println("Miss");
+//            System.out.println("Miss");
             close();
         }
     }
@@ -111,39 +111,47 @@ public class Note extends Thread{
         }
     }
 
-    public String judge(){
+    public String judge() {
         if(y >= 613){
-            System.out.println("Late");
+//            System.out.println("Late");
             close();
             return "Late";
 
         }else if(y >= 600){
-            System.out.println("Good");
+//            System.out.println("Good");
             close();
             return "Good";
 
         }else if(y>= 587){
-            System.out.println("Great");
+//            System.out.println("Great");
             close();
             return "Great";
 
-        }else if(y>= 574){
-            System.out.println("Perfect");
+        }else if(y>= 573){
+//            System.out.println("Perfect");
             close();
             return "Perfect";
 
-        }else if(y>= 561){
-            System.out.println("Great");
+        }else if(y>= 565){
+//            System.out.println("Great");
             close();
             return "Great";
 
-        }else if(y>= 540){
-            System.out.println("Early");
+        }else if(y >= 550){
+//            System.out.println("Good");
+            close();
+            return "Good";
+
+        }else if(y>= 535){
+//            System.out.println("Early");
             close();
             return "Early";
 
+        }else{
+            // 범위 안에서 안누르고 막 눌렀을 경우 miss
+            return "Miss";
         }
-        return "None";
+
     }
 
     public int getY(){

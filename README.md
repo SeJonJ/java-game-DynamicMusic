@@ -19,9 +19,13 @@ https://www.youtube.com/playlist?list=PLRx0vPvlEmdDySO3wDqMYGKMVH4Qa4QhR
 5. ArrayList 를 사용하여 각 배열에 Track 에 해당하는 객체를 넣어두고, index 번호에 따라서 음악을 고르고
    해당 음악에 맞는 정보 - 타이틀 이미지, 음악 이미지, 해당 음악 하이라이트 - 가 나오도록 설정
 
-6. 버튼을 사용하여 음악을 넘길 수 있도록 구현 이때 ArrayList 배열을 사용함
+6. 다양한 부분에서 ArrayList 배열을 사용함
+   - 다음 음악으로 넘길 때
+   - 노트 만든 후 불러올 때 등등
 
 7. 마우스에 행동에 따른 이벤트 구현 - 마우스를 위에 올렸을 때, 마우스로 클릭했을 때 -
+
+8. jar 패키징 시에도 동작 가능하도록 InputStream 활용
 
 ## 진행 상황
 1. 시작 화면에서 intro 음악 재생
@@ -39,6 +43,15 @@ https://www.youtube.com/playlist?list=PLRx0vPvlEmdDySO3wDqMYGKMVH4Qa4QhR
 7. 키보드 눌렀을 때 해당 키보드 이벤트 출력, 키보드별 음악 재생
 
 8. 노트 판정 기능 : 노트 판정 시 이미지, 판정 별 이미지 등
+
+9. jar 로 패키징 후 동작 확인 => jre 없이 단독 실행은 불가능
+
+10. 게임 점수 표시 가능 : 게임 화면 아래 표시 => Graphic.drawImage
+
+11. 게임 플레이 모드, 노트 찍기 모드 개별 구현
+    - 노트 찍기 모드 : noteMaker  = true 로 둘 시 resources/readNote/ 안에 '노래명'_'난이도'.txt 로 파일 생성. 파일에는 노트를 찍는 시간 + 찍은 노트(버튼)이 저장됨
+    - 게임 플레이 모드 : 노트 찍기 모드에서 내가 찍어둔 노트를 그대로 읽어와서 게임 노트를 출력해줌 => ArrayList 및 InputStream in , BufferedReader, StringTokenizer 사용
+
 
 ## 앞으로의 목표
 
