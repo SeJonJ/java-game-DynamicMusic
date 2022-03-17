@@ -55,11 +55,11 @@ https://www.youtube.com/playlist?list=PLRx0vPvlEmdDySO3wDqMYGKMVH4Qa4QhR
 
 ## 앞으로의 목표
 
-1. 노트를 쉽게 만들기 위한 index 메서드 수정 -> 추후 jar 파일에서도 동작 가능하도록
+1. exe 파일로 jre 없이 단독 실행 가능하도록 
 
-2. 게임 score 점수 표시
+2. DB 연결을 통해 My web 과 연동 후 로그인하여 게임 플레이 가능하도록
 
-3. exe 파일로 실행 가능하도록 or 추후 My web 과 연동가능하도록
+3. 코드 리펙토링
 
 ## 주의점
 - 해당 코드에는 /resources/game_music 및 menu_music , game_image 부분이 빠져있습니다. 이는 저작권에 맞는 음악을 사용한게 아니라 제가 좋아하는 노래들로 다운받아서 넣어두었기 때문입니다.
