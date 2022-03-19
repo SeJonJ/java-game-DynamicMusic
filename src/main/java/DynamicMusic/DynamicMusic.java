@@ -508,6 +508,11 @@ public class DynamicMusic extends JFrame {
         if(Game.noteMaker) {
             noteWriteButton.setVisible(true);
         }
+
+        // 게임 시작 시 점수 & 콤보 초기화
+        Game.combo = 0;
+        Game.score = 0;
+
         // 키보드 이벤트 동작을 위한 메서드
         // 이는 Main 클래스에 포커스가 맞춰져있어야 키보드 이벤트가 정상적으로 동작하기 때문
         setFocusable(true);
