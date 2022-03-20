@@ -8,3 +8,5 @@ out/
 /src/main/resources/game_music/
 /src/main/resources/menu_music/
 /src/main/resources/readNote/
+
+DB_conn.java

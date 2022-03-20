@@ -47,12 +47,15 @@ public class Game extends Thread {
     private String selectedMusic;
     private Music gameMusic;
 
-    // Note 편하게 찍기위한 변수
+    // Note maker 변수
     static boolean noteMaker = false;
     FileWriter fw;
 
     // 점수 출력
     static int score = 0;
+    // 콤보 출력
+    static int combo = 0;
+    private Image comboImage = new ImageIcon(getClass().getResource("/menu_images/combo.png")).getImage();
 
     public Game(String titleName, String diffiCulity, String selectedMusic) {
         this.titleName = titleName;
@@ -127,7 +130,9 @@ public class Game extends Thread {
             // 620 이 넘어가는 note 들에 대해서는 miss 이미지 출력
             if (note.getY() > 620) {
                 judgeImage = new ImageIcon(getClass().getResource("/menu_images/judgeMiss.png")).getImage();
-                score -=10;
+                score -= 10;
+                combo = 0;
+
             }
             // 현재 노트가 동작 상태가 아니라면 - Proceeded 가 false 라면 -
             // 사용되지 않은 노트는 화면에서 지워짐 -> 해당 i 번째 노트를 삭제
@@ -158,8 +163,14 @@ public class Game extends Thread {
         // 게임 점수 출력
         g.drawString(String.valueOf(score), 620, 702);
 
+        // 게임 콤보 출력
+        g.drawImage(comboImage, 1050,130,null);
+        g.setColor(Color.CYAN);
+        g.drawString(String.valueOf(combo), 1150, 270);
+
         // 폰트 설정2: 아래 나오는 텍스트에 폰트 적용용
         g.setFont(new Font("Elephant", Font.BOLD, 30));
+        g.setColor(Color.white);
 
         // ingame 키패드 확인 출력
         g.drawString("A", 270, 609);
@@ -190,7 +201,7 @@ public class Game extends Thread {
 
         if (noteMaker == true) {
             System.out.println(gameMusic.getTime() + " A");
-            noteWriter(titleName, diffiCulity, gameMusic.getTime(), "A");
+            noteWriter(gameMusic.getTime(), "A");
         }
 
         // note 판정 함수
@@ -208,7 +219,7 @@ public class Game extends Thread {
 
         if (noteMaker == true) {
             System.out.println(gameMusic.getTime() + " S");
-            noteWriter(titleName, diffiCulity, gameMusic.getTime(), "S");
+            noteWriter(gameMusic.getTime(), "S");
         }
         // note 판정 함수
         judge("S");
@@ -224,7 +235,7 @@ public class Game extends Thread {
 
         if (noteMaker == true) {
             System.out.println(gameMusic.getTime() + " D");
-            noteWriter(titleName, diffiCulity, gameMusic.getTime(), "D");
+            noteWriter(gameMusic.getTime(), "D");
 
         }
         // note 판정 함수
@@ -243,7 +254,7 @@ public class Game extends Thread {
 
         if (noteMaker == true) {
             System.out.println(gameMusic.getTime() + " Space");
-            noteWriter(titleName, diffiCulity, gameMusic.getTime(), "Space");
+            noteWriter(gameMusic.getTime(), "Space");
 
         }
 
@@ -262,7 +273,7 @@ public class Game extends Thread {
 
         if (noteMaker == true) {
             System.out.println(gameMusic.getTime() + " J");
-            noteWriter(titleName, diffiCulity, gameMusic.getTime(), "J");
+            noteWriter(gameMusic.getTime(), "J");
 
         }
 
@@ -280,7 +291,7 @@ public class Game extends Thread {
 
         if (noteMaker == true) {
             System.out.println(gameMusic.getTime() + " K");
-            noteWriter(titleName, diffiCulity, gameMusic.getTime(), "K");
+            noteWriter(gameMusic.getTime(), "K");
 
         }
         // note 판정 함수
@@ -297,7 +308,7 @@ public class Game extends Thread {
 
         if (noteMaker == true) {
             System.out.println(gameMusic.getTime() + " L");
-            noteWriter(titleName, diffiCulity, gameMusic.getTime(), "L");
+            noteWriter(gameMusic.getTime(), "L");
 
         }
         // note 판정 함수
@@ -330,6 +341,7 @@ public class Game extends Thread {
     // => note 에는 Thread 가 달려있고, note가 실행되면 Thread 가 같이 실행됨
     // => Dynamic Music 클래스에서 screenDraw 가 실행되면서 for문 noteList가 돌게 됨
     public void dropNote() {
+
         if (noteMaker == false) {
 
             Beat[] beats = null; // beat 객체를 배열로
@@ -344,66 +356,51 @@ public class Game extends Thread {
             String readfile = ""; // str 선언
 
             // 곡 명
-            if (titleName.equals("Lose Yourself - Eminem")) {
-                try {
+            try {
 
-                    // jar 파일로 만들었을 때 파일을 불러오기 위한 코드
-                    // InputStream 을 통해서 파일을 가져오고 이후 ButteredRead 를 통해서 파일을 읽는다.
-                    if (diffiCulity.equals("Easy")) { // 난이도 쉬움
-                        in = getClass().getResourceAsStream("/readNote/" + titleName + "_" + diffiCulity + ".txt");
-                        br = new BufferedReader(new InputStreamReader((in)));
+                // jar 파일로 만들었을 때 파일을 불러오기 위한 코드
+                // InputStream 을 통해서 파일을 가져오고 이후 ButteredRead 를 통해서 파일을 읽는다.
+                in = getClass().getResourceAsStream("/readNote/" + titleName + "_" + diffiCulity + ".txt");
+                br = new BufferedReader(new InputStreamReader((in)));
 
-                        // 파일을 한줄씩 읽어옴. 이때 1줄에 대하여 " " 공백으로 나눠서 각각 time, noteType Arraylist 에 저장함
-                        // 1. 1줄 : 1110 A 로 찍혀있고 이를 1110 과 A 로 나눔.
-                        // 2. 그후 시간은 time 에 버튼은 A에 저장함
-                        while ((readfile = br.readLine()) != null) {
+                // 파일을 한줄씩 읽어옴. 이때 1줄에 대하여 " " 공백으로 나눠서 각각 time, noteType Arraylist 에 저장함
+                // 1. 1줄 : 1110 A 로 찍혀있고 이를 1110 과 A 로 나눔.
+                // 2. 그후 시간은 time 에 A는 노트 타입에 저장함
+                while ((readfile = br.readLine()) != null) {
 
-                            StringTokenizer note_stk = new StringTokenizer(readfile, " ");
-                            time.add(Integer.parseInt(note_stk.nextToken()));
-                            noteType.add(note_stk.nextToken());
+                    StringTokenizer note_stk = new StringTokenizer(readfile, " ");
+                    time.add(Integer.parseInt(note_stk.nextToken()));
+                    noteType.add(note_stk.nextToken());
 
-                        }
-                    } else if (diffiCulity.equals("Hard")) { // 난이도 어려움
+                }
 
-                        in = getClass().getResourceAsStream("/readNote/" + titleName + "_" + diffiCulity + ".txt");
-                        br = new BufferedReader(new InputStreamReader((in)));
-
-                        // 파일을 한줄씩 읽어옴. 이때 1줄에 대하여 " " 공백으로 나눠서 각각 time, noteType Arraylist 에 저장함
-                        // 1. 1줄 : 1110 A 로 찍혀있고 이를 1110 과 A 로 나눔.
-                        // 2. 그후 시간은 time 에 버튼은 A에 저장함
-                        while ((readfile = br.readLine()) != null) {
-                            StringTokenizer note_stk = new StringTokenizer(readfile, " ");
-
-                            time.add(Integer.parseInt(note_stk.nextToken()));
-                            noteType.add(note_stk.nextToken());
-
-                        }
-                    }
 //                System.out.println(time.size());
 //                System.out.println("time : " + time.get(0));
 //                System.out.println("notetype : " + noteType.get(0));
 
 
-                    // 노트 떨어지는 시간 갭
-                    int gap = (660 / Main.NOTE_SPEED) * (Main.SLEEP_TIME) - (Main.REACH_TIME * 1000);
+                // 노트 떨어지는 시간 갭
+                int gap = 660/(Main.NOTE_SPEED) * (Main.SLEEP_TIME) - (Main.REACH_TIME);
 
-                    // beat 객체로 만든 beats 배열
-                    // 배열의 사이즈는 time 배열의 크기만큼
-                    // 즉 이로인해서 내가 찍은 전체 노트의 사이즈 = time 배열 사이즈 = noteType 사이즈 = beats 배열 사이즈
-                    beats = new Beat[time.size()];
+                // beat 객체로 만든 beats 배열
+                // 배열의 사이즈는 time 배열의 크기만큼
+                // 즉 이로인해서 내가 찍은 전체 노트의 사이즈 = time 배열 사이즈 = noteType 사이즈 = beats 배열 사이즈
+                beats = new Beat[time.size()];
 
-                    for (int j = 0; j < time.size(); j++) {
-                        // beat 배열의 생성자 매개변수로 time 과 noteType을 던져줌
-                        beats[j] = new Beat(time.get(j) - gap, noteType.get(j));
-                    }
-
-
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    e.printStackTrace();
+                for (int j = 0; j < time.size(); j++) {
+                    // beat 배열의 생성자 매개변수로 time 과 noteType을 던져줌
+                    beats[j] = new Beat(time.get(j)-gap, noteType.get(j));
+//                        System.out.println("time : " + time.get(j));
+//                        System.out.println("notetype : " + noteType.get(j));
+//                        System.out.println("시간 : "+gameMusic.getTime());
                 }
 
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                e.printStackTrace();
             }
+
 
             // beats 배열안에 있는 노트에서의 시간 값(getTime)이
             // 즉 노트가 떨어지는 시간이 게임 시간보다 작다면 노트가 떨어짐
@@ -413,11 +410,14 @@ public class Game extends Thread {
             while (true) {
                 boolean dropped = false;
 
-                if (beats[i].getTime() == gameMusic.getTime()) {
+                if (beats[i].getTime() <= gameMusic.getTime()) {
+//                    System.out.println("beat note: "+beats[i].getNoteName());
+//                    System.out.println("i : "+i);
                     Note note = new Note(beats[i].getNoteName());
                     note.start();
                     noteList.add(note);
                     i++;
+
                     dropped = true;
                 }
                 if (dropped) {
@@ -431,26 +431,11 @@ public class Game extends Thread {
         } else if (noteMaker == true) {
             System.out.println("노트 찍기 모드");
         }
+
     }
 
-    // 내가 찍은 note 읽어오기(임시)
-//    public void noteRead(String titleName, String diffiCulity) throws IOException {
-//        int index = 0;
-//
-//        InputStream in = getClass().getResourceAsStream("/readNote/"+titleName+"_"+diffiCulity+".txt");
-//        BufferedReader br = new BufferedReader(new InputStreamReader((in)));
-//
-//        String str = ""; // string 선언
-//        // 가져온 파일이 null 이 아닐동안 파일을 읽어옴
-//        while ((str=br.readLine()) !=null){
-//            index++;
-//        }
-//        this.index = index;
-//        br.close();
-//    }
-
-    // 내가 노트 찍기
-    public void noteWriter(String titleName, String diffiCulity, int getTime, String key) {
+    // 노트 찍기 모드
+    public void noteWriter(int getTime, String key) {
         try {
 
             BufferedWriter bw = new BufferedWriter(fw);
@@ -489,30 +474,37 @@ public class Game extends Thread {
 //        if (!judge.equals("None")) {
 //            blueFlareImage = new ImageIcon(getClass().getResource("/menu_images/blue_flare.png")).getImage();
 //        }
-
+        // Miss : 점수 -10, 콤보 초기화
+        // 나머지는 점수 +, 콤보+1
         if (judge.equals("Miss")) {
             judgeImage = new ImageIcon(getClass().getResource("/menu_images/judgeMiss.png")).getImage();
             score -= 10;
-        }
-        else if (judge.equals("Late")) {
+            combo = 0;
+
+        } else if (judge.equals("Late")) {
             judgeImage = new ImageIcon(getClass().getResource("/menu_images/judgeLate.png")).getImage();
             score += 5;
-
+            combo +=1;
         } else if (judge.equals("Early")) {
             judgeImage = new ImageIcon(getClass().getResource("/menu_images/judgeEarly.png")).getImage();
             score += 10;
+            combo +=1;
 
         } else if (judge.equals("Good")) {
             judgeImage = new ImageIcon(getClass().getResource("/menu_images/judgeGood.png")).getImage();
             score += 20;
+            combo +=1;
 
         } else if (judge.equals("Great")) {
             judgeImage = new ImageIcon(getClass().getResource("/menu_images/judgeGreat.png")).getImage();
             score += 30;
+            combo +=1;
 
         } else if (judge.equals("Perfect")) {
             judgeImage = new ImageIcon(getClass().getResource("/menu_images/judgePerfect.png")).getImage();
             score += 50;
+            combo +=1;
+
         }
     }
 }

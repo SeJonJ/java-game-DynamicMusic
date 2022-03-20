@@ -102,17 +102,24 @@ public class DynamicMusic extends JFrame {
         // trackList 에 track 정보 넣기
         trackList.add(new Track("DAYBREAK_FRONTLINE_title.png",
                 "DAYBREAK_FRONTLINE_menu.jpg",
-                "DAYBREAK_FRONTLINE_ingame_image.jpg",
+                "DAYBREAK_FRONTLINE_ingame.jpg",
                 "DAYBREAK_FRONTLINE_selected.mp3",
                 "DAYBREAK_FRONTLINE.mp3",
                 "DAYBREAK FRONTLINE"));
 
-        trackList.add(new Track("Eminem_Lose_Yourself_title_new.jpg",
+        trackList.add(new Track("Eminem_Lose_Yourself_title.jpg",
                 "Eminem_Lose_Yourself_menu.jpg",
                 "Eminem_Lose_Yourself_ingame.jpg",
                 "Eminem_Lose_Yourself_selected.mp3",
                 "Eminem_Lose_Yourself.mp3",
                 "Lose Yourself - Eminem"));
+
+        trackList.add(new Track("TheFatRat - The Calling_title.png",
+                "TheFatRat - The Calling_menu.jpg",
+                "TheFatRat - The Calling_ingame.jpg",
+                "TheFatRat - The Calling_selected.mp3",
+                "TheFatRat - The Calling.mp3",
+                "TheFatRat - The Calling"));
 
         setUndecorated(true); // 기본 메뉴바 삭제
         setTitle("Dynamic Music");
@@ -508,6 +515,11 @@ public class DynamicMusic extends JFrame {
         if(Game.noteMaker) {
             noteWriteButton.setVisible(true);
         }
+
+        // 게임 시작 시 점수 & 콤보 초기화
+        Game.combo = 0;
+        Game.score = 0;
+
         // 키보드 이벤트 동작을 위한 메서드
         // 이는 Main 클래스에 포커스가 맞춰져있어야 키보드 이벤트가 정상적으로 동작하기 때문
         setFocusable(true);
