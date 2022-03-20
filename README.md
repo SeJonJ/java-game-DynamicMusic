@@ -46,12 +46,13 @@ https://www.youtube.com/playlist?list=PLRx0vPvlEmdDySO3wDqMYGKMVH4Qa4QhR
 
 9. jar 로 패키징 후 동작 확인 => jre 없이 단독 실행은 불가능
 
-10. 게임 점수 표시 가능 : 게임 화면 아래 표시 => Graphic.drawImage
+10. 게임 점수 및 콤보 표시
+    - 게임 화면 아래 표시 => Graphic.drawImage
+    - 오른쪽에 콤보 표시 => Graphic.drawString                  
 
-11. 게임 플레이 모드, 노트 찍기 모드 개별 구현
+12. 게임 플레이 모드, 노트 찍기 모드 개별 구현
     - 노트 찍기 모드 : noteMaker  = true 로 둘 시 resources/readNote/ 안에 '노래명'_'난이도'.txt 로 파일 생성. 파일에는 노트를 찍는 시간 + 찍은 노트(버튼)이 저장됨
     - 게임 플레이 모드 : 노트 찍기 모드에서 내가 찍어둔 노트를 그대로 읽어와서 게임 노트를 출력해줌 => ArrayList 및 InputStream in , BufferedReader, StringTokenizer 사용
-
 
 ## 앞으로의 목표
 
