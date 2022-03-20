@@ -480,6 +480,7 @@ public class Game extends Thread {
             judgeImage = new ImageIcon(getClass().getResource("/menu_images/judgeMiss.png")).getImage();
             score -= 10;
             combo = 0;
+
         } else if (judge.equals("Late")) {
             judgeImage = new ImageIcon(getClass().getResource("/menu_images/judgeLate.png")).getImage();
             score += 5;

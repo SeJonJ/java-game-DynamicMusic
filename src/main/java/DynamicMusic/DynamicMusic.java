@@ -102,17 +102,24 @@ public class DynamicMusic extends JFrame {
         // trackList 에 track 정보 넣기
         trackList.add(new Track("DAYBREAK_FRONTLINE_title.png",
                 "DAYBREAK_FRONTLINE_menu.jpg",
-                "DAYBREAK_FRONTLINE_ingame_image.jpg",
+                "DAYBREAK_FRONTLINE_ingame.jpg",
                 "DAYBREAK_FRONTLINE_selected.mp3",
                 "DAYBREAK_FRONTLINE.mp3",
                 "DAYBREAK FRONTLINE"));
 
-        trackList.add(new Track("Eminem_Lose_Yourself_title_new.jpg",
+        trackList.add(new Track("Eminem_Lose_Yourself_title.jpg",
                 "Eminem_Lose_Yourself_menu.jpg",
                 "Eminem_Lose_Yourself_ingame.jpg",
                 "Eminem_Lose_Yourself_selected.mp3",
                 "Eminem_Lose_Yourself.mp3",
                 "Lose Yourself - Eminem"));
+
+        trackList.add(new Track("TheFatRat - The Calling_title.png",
+                "TheFatRat - The Calling_menu.jpg",
+                "TheFatRat - The Calling_ingame.jpg",
+                "TheFatRat - The Calling_selected.mp3",
+                "TheFatRat - The Calling.mp3",
+                "TheFatRat - The Calling"));
 
         setUndecorated(true); // 기본 메뉴바 삭제
         setTitle("Dynamic Music");
