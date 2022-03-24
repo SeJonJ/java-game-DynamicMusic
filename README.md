@@ -50,9 +50,13 @@ https://www.youtube.com/playlist?list=PLRx0vPvlEmdDySO3wDqMYGKMVH4Qa4QhR
     - 게임 화면 아래 표시 => Graphic.drawImage
     - 오른쪽에 콤보 표시 => Graphic.drawString                  
 
-12. 게임 플레이 모드, 노트 찍기 모드 개별 구현
+11. 게임 플레이 모드, 노트 찍기 모드 개별 구현
     - 노트 찍기 모드 : noteMaker  = true 로 둘 시 resources/readNote/ 안에 '노래명'_'난이도'.txt 로 파일 생성. 파일에는 노트를 찍는 시간 + 찍은 노트(버튼)이 저장됨
     - 게임 플레이 모드 : 노트 찍기 모드에서 내가 찍어둔 노트를 그대로 읽어와서 게임 노트를 출력해줌 => ArrayList 및 InputStream in , BufferedReader, StringTokenizer 사용
+
+12. JDBC Mysql 연동
+    - JDBC 를 이용해서 MySQL과 연동하여 로그인 후 게임 이요이 가능하도록 설정
+    - MySQL 에서 연동되는 DB는 MyWeb 과 동일한 DB
 
 ## 앞으로의 목표
 

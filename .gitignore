@@ -9,4 +9,4 @@ out/
 /src/main/resources/menu_music/
 /src/main/resources/readNote/
 
-DB_conn.java
+/src/main/java/DynamicMusic/DB_info.java

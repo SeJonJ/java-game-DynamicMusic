@@ -329,7 +329,6 @@ public class Game extends Thread {
         gameMusic.close();
         // 스레드 종료
         this.interrupt();
-        // fileWriter 종료
 
     }
 
@@ -380,7 +379,8 @@ public class Game extends Thread {
 
 
                 // 노트 떨어지는 시간 갭
-                int gap = 660/(Main.NOTE_SPEED) * (Main.SLEEP_TIME) - (Main.REACH_TIME);
+//                int gap = 660/(Main.NOTE_SPEED) * (Main.SLEEP_TIME) - (Main.REACH_TIME);
+                int gap = 125 - Main.REACH_TIME;
 
                 // beat 객체로 만든 beats 배열
                 // 배열의 사이즈는 time 배열의 크기만큼
@@ -389,7 +389,7 @@ public class Game extends Thread {
 
                 for (int j = 0; j < time.size(); j++) {
                     // beat 배열의 생성자 매개변수로 time 과 noteType을 던져줌
-                    beats[j] = new Beat(time.get(j)-gap, noteType.get(j));
+                    beats[j] = new Beat(time.get(j)+gap, noteType.get(j));
 //                        System.out.println("time : " + time.get(j));
 //                        System.out.println("notetype : " + noteType.get(j));
 //                        System.out.println("시간 : "+gameMusic.getTime());
@@ -431,7 +431,6 @@ public class Game extends Thread {
         } else if (noteMaker == true) {
             System.out.println("노트 찍기 모드");
         }
-
     }
 
     // 노트 찍기 모드
@@ -469,7 +468,7 @@ public class Game extends Thread {
     }
 
     public void judgeEvent(String judge) {
-        System.out.println(judge);
+//        System.out.println(judge);
         blueFlareImage = new ImageIcon(getClass().getResource("/menu_images/blue_flare.png")).getImage();
 //        if (!judge.equals("None")) {
 //            blueFlareImage = new ImageIcon(getClass().getResource("/menu_images/blue_flare.png")).getImage();

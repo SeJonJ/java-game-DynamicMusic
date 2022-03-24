@@ -456,6 +456,32 @@ public class DynamicMusic extends JFrame {
         selectedMusic.start();
     }
 
+    public void game_menu(){
+        // 시작, 종료버튼 없애기
+        startButton.setVisible(false);
+        quitButton.setVisible(false);
+
+        // 여기는 게임 메인 화면에 들어갔을 때 배경화면
+        Background = new ImageIcon(getClass().getResource("/menu_images/main_Bakground.jpg")).getImage();
+
+        // 게임 시작을 누르면 isMainScreen 을 true 로
+        isMainScreen = true;
+
+        //  left 와 right 버튼이 보이기
+        leftButton.setVisible(true);
+        rightButton.setVisible(true);
+
+        // 난이도 버튼 표시
+        easyButton.setVisible(true);
+        hardButton.setVisible(true);
+
+        // nowselected 번째 index 재생
+        selectTrack(0);
+
+        // 인트로 음악 종료
+        Intromusic.close();
+    }
+
     // 왼쪽 버튼 메서드
     public void selectLelft() {
         // 0번째 곡일때는 전체 trackList 크기에서 -1 한다.
@@ -554,32 +580,6 @@ public class DynamicMusic extends JFrame {
 
         // 메뉴로 돌아왔을 때 게임 종료
         game.Close();
-    }
-
-    public void game_menu(){
-        // 시작, 종료버튼 없애기
-        startButton.setVisible(false);
-        quitButton.setVisible(false);
-
-        // 여기는 게임 메인 화면에 들어갔을 때 배경화면
-        Background = new ImageIcon(getClass().getResource("/menu_images/main_Bakground.jpg")).getImage();
-
-        // 게임 시작을 누르면 isMainScreen 을 true 로
-        isMainScreen = true;
-
-        //  left 와 right 버튼이 보이기
-        leftButton.setVisible(true);
-        rightButton.setVisible(true);
-
-        // 난이도 버튼 표시
-        easyButton.setVisible(true);
-        hardButton.setVisible(true);
-
-        // nowselected 번째 index 재생
-        selectTrack(0);
-
-        // 인트로 음악 종료
-        Intromusic.close();
     }
 }
 

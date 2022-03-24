@@ -1,9 +1,5 @@
 package DynamicMusic;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
 public class Main {
     // FINAL 은 한번 선언되면 변경X 변수 => 이런 상수들은 대문자로 정의
 
@@ -20,8 +16,7 @@ public class Main {
     public static final int REACH_TIME = 1;
 
     public static void main(String[] args){
-
-        new DynamicMusic().start();
+        new LoginFrame().loginWindow();
 
         System.out.println("실행 완료");
 

@@ -64,15 +64,10 @@ public class Music extends Thread{
     @Override
     public void run(){
         try{
+
             do{
+                // player 객체에는 buf 에 담긴 음악을 가져와서 play!
                 player.play();
-
-//                fileInputStream = new FileInputStream(file);
-//                bufferedInputStream = new BufferedInputStream(fileInputStream);
-//
-//                player = new Player(bufferedInputStream);
-
-                player = new Player(bufferedInputStream); // 최종적으로 player 인스턴스는 버퍼에 담긴 음악 파일을 갖음
 
             }while(isLoop == true); // isLoop 가 true 인 동안 음악 반복 재생
         } catch (Exception e) {

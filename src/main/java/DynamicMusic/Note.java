@@ -17,9 +17,10 @@ public class Note extends Thread{
     private Image noteBasicImage = new ImageIcon(getClass().getResource("/menu_images/noteBasic_new.jpg")).getImage();
 
     // 현재 노트 위치 확인을 위한 x, y 좌표
-    // 이 중 y 값의 시작위치 - 120 - 으로 고정으로 해두어서
+    // 이 중 y 값의 시작위치를 특정값으로 고정으로 해두어서
     // 노트가 생성된 지 1초 뒤 노트 판정위치인 580에 도달 할 수 있도록 함
-    private int x, y = 580 - 1000 / Main.SLEEP_TIME * Main.NOTE_SPEED;
+    private int x;
+    private int y = 580 - 1000 / Main.SLEEP_TIME * Main.NOTE_SPEED;
 
     private String noteType;
 
