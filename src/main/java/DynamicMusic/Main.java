@@ -20,6 +20,5 @@ public class Main {
 
         System.out.println("실행 완료");
 
-
     }
 }

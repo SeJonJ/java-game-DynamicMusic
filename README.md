@@ -6,6 +6,8 @@
 좋은 영상 감사합니다.
 https://www.youtube.com/playlist?list=PLRx0vPvlEmdDySO3wDqMYGKMVH4Qa4QhR
 
+코드에 대해 자세한 정리 내용은 본인의 블로그 https://terianp.tistory.com/ 에 올려두었습니다.
+
 ## 아래와 같은 부분을 공부하였습니다
 
 1. JFrame 을 이용한 GUI 구현 및 JFRAME 의 다양한 메서드 사용
@@ -58,9 +60,14 @@ https://www.youtube.com/playlist?list=PLRx0vPvlEmdDySO3wDqMYGKMVH4Qa4QhR
     - JDBC 를 이용해서 MySQL과 연동하여 로그인 후 게임 이요이 가능하도록 설정
     - MySQL 에서 연동되는 DB는 MyWeb 과 동일한 DB
 
-## 앞으로의 목표
+## 단기 목표
+1. 음악 종료 시 최고 점수 및 최고 콤보 수 출력
 
-1. exe 파일로 jre 없이 단독 실행 가능하도록 
+2. 음악 종료 시 로그인한 아이디로 GAME DB 에 최고 점수 및 콤보 저장
+
+## 앞으로의 목표 - 장기
+
+1. exe 파일로 jre 없이 단독 실행 가능하도록 => 이건 불가능할듯...
 
 2. DB 연결을 통해 My web 과 연동 후 로그인하여 게임 플레이 가능하도록
 

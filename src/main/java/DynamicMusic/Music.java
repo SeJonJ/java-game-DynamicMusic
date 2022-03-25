@@ -70,6 +70,7 @@ public class Music extends Thread{
                 player.play();
 
             }while(isLoop == true); // isLoop 가 true 인 동안 음악 반복 재생
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

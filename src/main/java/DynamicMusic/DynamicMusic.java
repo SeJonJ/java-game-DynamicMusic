@@ -7,6 +7,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
+import java.util.TimerTask;
 
 public class DynamicMusic extends JFrame {
 
@@ -20,7 +21,7 @@ public class DynamicMusic extends JFrame {
 
     // Background 객체는 이후 아래에서 화면이 전환될때 이곳에 다른 사진을 넣어서 배경경 사진 바뀔 수 있도록 함
     // 시작화면 background
-    private Image Background = new ImageIcon(getClass().getResource("/menu_images/intro_background.jpg")).getImage();
+    private Image introBackground = new ImageIcon(getClass().getResource("/menu_images/intro_background.jpg")).getImage();
 
     // memuBar 객체 안에 memuBar 이미지가 들어가게 됨
     private JLabel menuBar = new JLabel(new ImageIcon(getClass().getResource("/menu_images/menuBar.png")));
@@ -74,7 +75,10 @@ public class DynamicMusic extends JFrame {
     // 윈도우 창 위치를 메뉴바를 끌어서 옮길 수 있도록 마우스 좌표 int
     private int MouseX, MouseY;
 
-    // 게임에 맞춰 화면을 표시하기 위한 변수
+    // 타이틀 메뉴인지 확인 여부
+    private boolean isTittleScreen = true;
+
+    // 게임 메뉴로 넘어왔는지를 표시하기 위한 변수
     private boolean isMainScreen = false;
 
     // Ingame 으로 넘어왔는지 확인하기 위한 변수수
@@ -98,28 +102,39 @@ public class DynamicMusic extends JFrame {
     // static 으로 만들어줌
     public static Game game;
 
-    public void start() {
+    // LoginDB 클래스
+    LoginDB loginDB;
+
+
+    public DynamicMusic(LoginDB loginDB){
+        this.loginDB = loginDB;
+    }
+
+    public void musicStart() {
         // trackList 에 track 정보 넣기
         trackList.add(new Track("DAYBREAK_FRONTLINE_title.png",
                 "DAYBREAK_FRONTLINE_menu.jpg",
                 "DAYBREAK_FRONTLINE_ingame.jpg",
                 "DAYBREAK_FRONTLINE_selected.mp3",
                 "DAYBREAK_FRONTLINE.mp3",
-                "DAYBREAK FRONTLINE"));
+                "DAYBREAK FRONTLINE",
+                230000));
 
         trackList.add(new Track("Eminem_Lose_Yourself_title.jpg",
                 "Eminem_Lose_Yourself_menu.jpg",
                 "Eminem_Lose_Yourself_ingame.jpg",
                 "Eminem_Lose_Yourself_selected.mp3",
                 "Eminem_Lose_Yourself.mp3",
-                "Lose Yourself - Eminem"));
+                "Lose Yourself - Eminem",
+                230000));
 
         trackList.add(new Track("TheFatRat - The Calling_title.png",
                 "TheFatRat - The Calling_menu.jpg",
                 "TheFatRat - The Calling_ingame.jpg",
                 "TheFatRat - The Calling_selected.mp3",
                 "TheFatRat - The Calling.mp3",
-                "TheFatRat - The Calling"));
+                "TheFatRat - The Calling",
+                230000));
 
         setUndecorated(true); // 기본 메뉴바 삭제
         setTitle("Dynamic Music");
@@ -216,7 +231,7 @@ public class DynamicMusic extends JFrame {
 
         // 왼쪽 이동 버튼
         leftButton.setVisible(false);
-        leftButton.setBounds(140, 310, 60, 60);
+        leftButton.setBounds(100, 310, 60, 60);
         leftButton.setBorderPainted(false);
         leftButton.setContentAreaFilled(false);
         leftButton.setFocusPainted(false);
@@ -241,7 +256,7 @@ public class DynamicMusic extends JFrame {
 
         // 오른쪽 이동 버튼 : 시작햇을 때는 왼쪽, 오른쪽 버튼은 보일 필요가 없음 =>setVisble(false)
         rightButton.setVisible(false);
-        rightButton.setBounds(1040, 310, 60, 60);
+        rightButton.setBounds(leftButton.getX()+780, 310, 60, 60);
         rightButton.setBorderPainted(false);
         rightButton.setContentAreaFilled(false);
         rightButton.setFocusPainted(false);
@@ -267,7 +282,7 @@ public class DynamicMusic extends JFrame {
         // easy 난이도 버튼
         // 시작화면에서는 난이도버튼 보일 필요 없음
         easyButton.setVisible(false);
-        easyButton.setBounds(375, 580, 250, 67);
+        easyButton.setBounds(230, 580, 250, 67);
         easyButton.setBorderPainted(false);
         easyButton.setContentAreaFilled(false);
         easyButton.setFocusPainted(false);
@@ -293,7 +308,7 @@ public class DynamicMusic extends JFrame {
 
         // hard 난이도 버튼
         hardButton.setVisible(false);
-        hardButton.setBounds(655, 580, 250, 67);
+        hardButton.setBounds(easyButton.getX()+280, 580, 250, 67);
 //        hardButton.setBounds(900, 350, 250, 67);
         hardButton.setBorderPainted(false);
         hardButton.setContentAreaFilled(false);
@@ -411,18 +426,25 @@ public class DynamicMusic extends JFrame {
         // drawImage 메서드를 Introbackground 를  x, y 좌표에 그려줌
         // g.drawImage 부분은 paintComponents 처럼 화면에 추가된 요소를 그려주는 것이 아닌 단순히
         // 이미지를 그림 그리는 것
-        g.drawImage(Background, 0, 0, null);
+        g.drawImage(introBackground, 0, 0, null);
+
+        if(isTittleScreen){
+            // 현재 로그인 정보 가져오기
+            g.setColor(Color.GREEN);
+            g.setFont(new Font("Arial", Font.BOLD, 40));
+            g.drawString("Welcome "+loginDB.getGetID(), 150, 150);
+        }
 
         // isMainScreen = true 면 selectedImage 를 보여줌
         if (isMainScreen) {
-            g.drawImage(selectedImage, 350, 100, null);
-            g.drawImage(titleImage, 340, 85, null);
+            g.drawImage(selectedImage, 200, 100, null);
+            g.drawImage(titleImage, 210, 85, null);
         }
 
         // isGameScreen = true 인게임 화면에서의 그래픽
         // ingame 에 관한 그래픽 내용은 Game 클래스에서 관리
         if(isGameScreen){
-            game.screeenDraw(g);
+            game.screenDraw(g);
         }
 
         // paintComponents 는 이미지를 단순히 그려주는 것 이외에 JLabel 처럼 추가된 요소를 그리는 것
@@ -452,7 +474,7 @@ public class DynamicMusic extends JFrame {
                 trackList.get(nowSelected).getMenuImage())).getImage();
 
 
-        selectedMusic = new Music(trackList.get(nowSelected).getStartMusic(), true, "game");
+        selectedMusic = new Music(trackList.get(nowSelected).getSelectMusic(), true, "game");
         selectedMusic.start();
     }
 
@@ -462,10 +484,11 @@ public class DynamicMusic extends JFrame {
         quitButton.setVisible(false);
 
         // 여기는 게임 메인 화면에 들어갔을 때 배경화면
-        Background = new ImageIcon(getClass().getResource("/menu_images/main_Bakground.jpg")).getImage();
+        introBackground = new ImageIcon(getClass().getResource("/menu_images/main_Bakground.jpg")).getImage();
 
-        // 게임 시작을 누르면 isMainScreen 을 true 로
+        // 게임 시작을 누르면 isMainScreen 을 true 로, titleScreen 은 false 로
         isMainScreen = true;
+        isTittleScreen = false;
 
         //  left 와 right 버튼이 보이기
         leftButton.setVisible(true);
@@ -512,8 +535,10 @@ public class DynamicMusic extends JFrame {
             selectedMusic.close();
         }
 
-        // 메인 스크린을 false 로 => 이렇게되면 screenDraw 함수에서 isMainScreen 부분을 멈추게됨
+        // 타이틀과 메인 스크린을 false 로 => 이렇게되면 screenDraw 함수에서 isMainScreen 부분을 멈추게됨
+        // 이때 titleScreen 은 앞에서 이미 Main_menu 에서 false 해줬기 때문에 한번더 해줄 필요는 없음
         isMainScreen = false;
+//        isTittleScreen = false;
 
         // Ingame 전환 확인
         isGameScreen = true;
@@ -534,7 +559,7 @@ public class DynamicMusic extends JFrame {
         backButton.setVisible(true);
 
         // 백그라운드 이미지가 ingame 이미지로 바뀌어야함
-        Background = new ImageIcon(getClass().getResource("/game_images/"+trackList.get(nowSelected).getIngameImage())).getImage();
+        introBackground = new ImageIcon(getClass().getResource("/game_images/"+trackList.get(nowSelected).getIngameImage())).getImage();
 
         // 노트 찍기 모드 일때는 해당 이미지 추가
         // noteMaker = true 일 때만 버튼 보이게
@@ -543,8 +568,17 @@ public class DynamicMusic extends JFrame {
         }
 
         // 게임 시작 시 점수 & 콤보 초기화
-        Game.combo = 0;
-        Game.score = 0;
+        game.score = 0;
+        game.combo = 0;
+
+        // 타이머를 이용한 게임 결과 출력
+//        Timer timer = new Timer();
+//        TimerTask timerTask = new TimerTask() {
+//            @Override
+//            public void run() {
+//
+//            }
+//        }
 
         // 키보드 이벤트 동작을 위한 메서드
         // 이는 Main 클래스에 포커스가 맞춰져있어야 키보드 이벤트가 정상적으로 동작하기 때문
@@ -576,7 +610,7 @@ public class DynamicMusic extends JFrame {
         selectTrack(nowSelected);
 
         // 백그라운드 이미지가 track 의 nowSelected 에 맞는 이미지로
-        Background = new ImageIcon(getClass().getResource("/menu_images/main_Bakground.jpg")).getImage();
+        introBackground = new ImageIcon(getClass().getResource("/menu_images/main_Bakground.jpg")).getImage();
 
         // 메뉴로 돌아왔을 때 게임 종료
         game.Close();

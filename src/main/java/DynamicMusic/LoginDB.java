@@ -11,14 +11,18 @@ public class LoginDB extends DB_info {
     ResultSet rs = null;
     String sql;
 
+    // 사용자가 입력한 ID, PW
     private String loginID;
     private String loginPW;
 
-
+    // DB에서 가져온 ID PW
+    private String getID;
+    private String getPW;
+    private int getMemberCODE;
 
     public boolean loginStart(){
         try {
-            conn = DriverManager.getConnection(getUrl(), getUser(), getPasswd());
+            conn = DriverManager.getConnection(getHjDB(), getUser(), getPasswd());
             sql = "SELECT * FROM MEMBER WHERE MID = '"+loginID+"' AND MPASSWD = '"+loginPW+"'";
 
             try {
@@ -27,8 +31,13 @@ public class LoginDB extends DB_info {
                 rs = stmt.executeQuery(sql);
                 rs.next();
 
-                String getID = rs.getString("MID");
-                String getPW = rs.getString("MPASSWD");
+                getID = rs.getString("MID");
+                getPW = rs.getString("MPASSWD");
+                getMemberCODE = rs.getInt("MEMBER_CODE");
+
+//                System.out.println("현재 멤버 코드 : "+getMemberCODE);
+//                System.out.println("현재 아이디 : "+getID);
+//                System.out.println("현재 패스워드 : "+getPW);
 
 
                 if (loginID.equals(getID) && loginPW.equals(getPW)) {
@@ -52,6 +61,11 @@ public class LoginDB extends DB_info {
         }
     }
 
+    public void DataInsert(){
+        int highScore;
+        int highCombo;
+    }
+
     public String getLoginID() {
         return loginID;
     }
@@ -68,6 +82,9 @@ public class LoginDB extends DB_info {
         this.loginPW = loginPW;
     }
 
+    public String getGetID(){
+        return getID;
+    }
 
 //    public static void main(String[] args) {
 //        new LoginDB().loginStart();

@@ -52,9 +52,12 @@ public class Game extends Thread {
     FileWriter fw;
 
     // 점수 출력
-    static int score = 0;
+    int score = 0;
+    int highScore = 0;
+
     // 콤보 출력
-    static int combo = 0;
+    int combo = 0;
+    int highCombo = 0;
     private Image comboImage = new ImageIcon(getClass().getResource("/menu_images/combo.png")).getImage();
 
     public Game(String titleName, String diffiCulity, String selectedMusic) {
@@ -80,7 +83,7 @@ public class Game extends Thread {
     // 음악 노트를 개별적으로 관리할 ArrayList
     ArrayList<Note> noteList = new ArrayList<Note>();
 
-    public void screeenDraw(Graphics2D g) {
+    public void screenDraw(Graphics2D g) {
         // INGAME 노트 경로 배경, 노트 경로별 경계선(라인), 어떤키 사용하는지, 점수 등 => 총 7키
         // 뒷부분에 그려지는 이미지 - 코드 일수록 - 앞쪽으로 튀어나와서 그려지게 됨, 마치 모드처럼
 
@@ -160,13 +163,39 @@ public class Game extends Thread {
         // ingame 에서 노래 난이도 출력
         g.drawString(diffiCulity, 1190, 700);
 
+        // 최고 점수, 최고 콤보 확인
+        if(highScore < score){
+            highScore = score;
+        }
+
+        if(highCombo < combo){
+            highCombo = combo;
+        }
+
         // 게임 점수 출력
-        g.drawString(String.valueOf(score), 620, 702);
+        if(score<0){ // 점수가 0 미만으로 내려가면 그냥 0 출력
+            g.drawString(String.valueOf(0), 620, 702);
+            g.drawString(String.valueOf(0), 750, 702);
+        }else{ // 아니면 그대로 출력
+            g.drawString(String.valueOf(score), 620, 702);
+            g.drawString(String.valueOf(highScore), 750, 702);
+        }
 
         // 게임 콤보 출력
         g.drawImage(comboImage, 1050,130,null);
         g.setColor(Color.CYAN);
         g.drawString(String.valueOf(combo), 1150, 270);
+        g.drawString(String.valueOf(highCombo), 1150, 350);
+
+        // 시간 테스트
+//        g.setColor(Color.green);
+//        g.drawString(String.valueOf(gameMusic.getTime()),1150, 400);
+//        if(gameMusic.getTime() == 0){
+//            System.out.println("음악 시작");
+//        }
+//        else if(gameMusic.getTime() == 200000){
+//            System.out.println("Middle time");
+//        }
 
         // 폰트 설정2: 아래 나오는 텍스트에 폰트 적용용
         g.setFont(new Font("Elephant", Font.BOLD, 30));

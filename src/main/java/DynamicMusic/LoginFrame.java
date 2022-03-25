@@ -7,8 +7,11 @@ import java.awt.event.ActionListener;
 
 public class LoginFrame extends JFrame {
 
-
+    // DB 접속 클래스
     LoginDB loginDB = new LoginDB();
+    // DynamicMusic 클래스
+    DynamicMusic dynamicMusic = new DynamicMusic(loginDB);
+
     JButton jbtnLogin;
     JButton jbtnRegister;
 
@@ -32,21 +35,21 @@ public class LoginFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-
                 loginDB.setLoginID(tfID.getText());
                 loginDB.setLoginPW(tfPW.getText());
 
                 if (loginDB.loginStart()){
 
-                    // 한개의 창만 닫기
+                    // 한개의 창만 닫기 : 현재 창만 닫음
                     dispose();
 
-                    // DynamicMusic 시작
-                    new DynamicMusic().start();
+                    // DynamicMusic 게임 시작
+                    dynamicMusic.musicStart();
 
                 }else{
                     System.out.println("로그인 실패");
-                    JOptionPane.showConfirmDialog(jbtnLogin,"로그인 정보를 확인해주세요","로그인 에러",JOptionPane.DEFAULT_OPTION);
+                    JOptionPane.showConfirmDialog(lb,"로그인 정보를 확인해주세요","로그인 에러",JOptionPane.DEFAULT_OPTION);
+
                 }
             }
         });
