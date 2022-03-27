@@ -60,6 +60,8 @@ https://www.youtube.com/playlist?list=PLRx0vPvlEmdDySO3wDqMYGKMVH4Qa4QhR
     - JDBC 를 이용해서 MySQL과 연동하여 로그인 후 게임 이요이 가능하도록 설정
     - MySQL 에서 연동되는 DB는 MyWeb 과 동일한 DB
 
+13. URL 객체와 Image 를 사용하여 인트로 배경화면을 gif 로 구현
+
 ## 단기 목표
 1. 음악 종료 시 최고 점수 및 최고 콤보 수 출력
 

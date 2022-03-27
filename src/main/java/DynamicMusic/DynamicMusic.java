@@ -1,11 +1,13 @@
 package DynamicMusic;
 
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.TimerTask;
 
@@ -21,7 +23,25 @@ public class DynamicMusic extends JFrame {
 
     // Background 객체는 이후 아래에서 화면이 전환될때 이곳에 다른 사진을 넣어서 배경경 사진 바뀔 수 있도록 함
     // 시작화면 background
-    private Image introBackground = new ImageIcon(getClass().getResource("/menu_images/intro_background.jpg")).getImage();
+    // 1. Intro 배경화면 jpg
+//    private Image introBackground = new ImageIcon(getClass().getResource("/menu_images/Intro_background.jpg")).getImage();
+
+    // 2. intro 배경화면 gif
+    // URL 객체를 사용하면 gif 를 graphic 에 띄울 수 잇음
+    URL bakgroundGIF = getClass().getResource("/menu_images/intro_Bakground.gif");
+
+    private Image introBackground;
+    {
+        try{
+            introBackground = new ImageIcon(bakgroundGIF).getImage();
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+
+    // 게임 로고
+    private Image gameLogo = new ImageIcon(getClass().getResource("/menu_images/Dynamic_Music_logo2.png")).getImage();
 
     // memuBar 객체 안에 memuBar 이미지가 들어가게 됨
     private JLabel menuBar = new JLabel(new ImageIcon(getClass().getResource("/menu_images/menuBar.png")));
@@ -57,7 +77,6 @@ public class DynamicMusic extends JFrame {
 
     // 노트 찍기 모드
     private ImageIcon noteWriteMod = new ImageIcon(getClass().getResource("/menu_images/noteWirteMod.png"));
-
 
     // Button 생성
     private JButton exitButton = new JButton(exitButtonImage);
@@ -429,10 +448,13 @@ public class DynamicMusic extends JFrame {
         g.drawImage(introBackground, 0, 0, null);
 
         if(isTittleScreen){
+            // Logo
+            g.drawImage(gameLogo, 150, 50, null);
+
             // 현재 로그인 정보 가져오기
             g.setColor(Color.GREEN);
             g.setFont(new Font("Arial", Font.BOLD, 40));
-            g.drawString("Welcome "+loginDB.getGetID(), 150, 150);
+            g.drawString("Welcome "+loginDB.getGetID(), 880,180);
         }
 
         // isMainScreen = true 면 selectedImage 를 보여줌
@@ -445,6 +467,10 @@ public class DynamicMusic extends JFrame {
         // ingame 에 관한 그래픽 내용은 Game 클래스에서 관리
         if(isGameScreen){
             game.screenDraw(g);
+            // 시간되면 게임 종료
+//            if(game.musicTime().getTime() == 10000){
+//                bakMain();
+//            }
         }
 
         // paintComponents 는 이미지를 단순히 그려주는 것 이외에 JLabel 처럼 추가된 요소를 그리는 것

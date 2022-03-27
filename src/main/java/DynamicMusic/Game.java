@@ -175,27 +175,16 @@ public class Game extends Thread {
         // 게임 점수 출력
         if(score<0){ // 점수가 0 미만으로 내려가면 그냥 0 출력
             g.drawString(String.valueOf(0), 620, 702);
-            g.drawString(String.valueOf(0), 750, 702);
         }else{ // 아니면 그대로 출력
             g.drawString(String.valueOf(score), 620, 702);
-            g.drawString(String.valueOf(highScore), 750, 702);
         }
+        g.drawString(String.valueOf(highScore), 750, 702);
 
         // 게임 콤보 출력
         g.drawImage(comboImage, 1050,130,null);
         g.setColor(Color.CYAN);
         g.drawString(String.valueOf(combo), 1150, 270);
         g.drawString(String.valueOf(highCombo), 1150, 350);
-
-        // 시간 테스트
-//        g.setColor(Color.green);
-//        g.drawString(String.valueOf(gameMusic.getTime()),1150, 400);
-//        if(gameMusic.getTime() == 0){
-//            System.out.println("음악 시작");
-//        }
-//        else if(gameMusic.getTime() == 200000){
-//            System.out.println("Middle time");
-//        }
 
         // 폰트 설정2: 아래 나오는 텍스트에 폰트 적용용
         g.setFont(new Font("Elephant", Font.BOLD, 30));
@@ -532,8 +521,12 @@ public class Game extends Thread {
             judgeImage = new ImageIcon(getClass().getResource("/menu_images/judgePerfect.png")).getImage();
             score += 50;
             combo +=1;
-
         }
+    }
+
+
+    public Music musicTime(){
+        return gameMusic;
     }
 }
 

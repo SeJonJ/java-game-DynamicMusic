@@ -12,8 +12,6 @@ public class Music extends Thread{
     private boolean isLoop; // 음악의 무한 루프 확인
     private BufferedInputStream bufferedInputStream;
 
-//    private File file; // 파일을 가져오는 클래스
-//    private FileInputStream fileInputStream;
 
     // 음악 mp3 파일 이름, 음악 반복재생 여부, 게임관련 음악인지 메뉴 관련 음악인지 여부
     public Music(String name, boolean isLoop, String mod) {
