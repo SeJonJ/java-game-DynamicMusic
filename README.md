@@ -1,4 +1,4 @@
-## 따라하면서 배우기 1
+## 따라하면서 배우기 
 ## Java 리듬 게임 구현
 ## 재미있어 보이는 것들을 직접 따라하고 코드로 구현해보면서 공부하였습니다
 
@@ -6,7 +6,7 @@
 좋은 영상 감사합니다.
 https://www.youtube.com/playlist?list=PLRx0vPvlEmdDySO3wDqMYGKMVH4Qa4QhR
 
-코드에 대해 자세한 정리 내용은 본인의 블로그 https://terianp.tistory.com/ 에 올려두었습니다.
+코드에 대한 보다 자세한 정리는 본인의 블로그 https://terianp.tistory.com/ 에 올려두었습니다.
 
 ## 아래와 같은 부분을 공부하였습니다
 
@@ -28,6 +28,8 @@ https://www.youtube.com/playlist?list=PLRx0vPvlEmdDySO3wDqMYGKMVH4Qa4QhR
 7. 마우스에 행동에 따른 이벤트 구현 - 마우스를 위에 올렸을 때, 마우스로 클릭했을 때 -
 
 8. jar 패키징 시에도 동작 가능하도록 InputStream 활용
+
+9. JDBC 를 사용하여 로그인하고, 로그인 후 해당 사용자로 음악 게임 종료 시 점수를 저장할 수 있도록 함
 
 ## 진행 상황
 1. 시작 화면에서 intro 음악 재생
@@ -57,15 +59,17 @@ https://www.youtube.com/playlist?list=PLRx0vPvlEmdDySO3wDqMYGKMVH4Qa4QhR
     - 게임 플레이 모드 : 노트 찍기 모드에서 내가 찍어둔 노트를 그대로 읽어와서 게임 노트를 출력해줌 => ArrayList 및 InputStream in , BufferedReader, StringTokenizer 사용
 
 12. JDBC Mysql 연동
-    - JDBC 를 이용해서 MySQL과 연동하여 로그인 후 게임 이요이 가능하도록 설정
+    - JDBC 를 이용해서 MySQL과 연동하여 로그인 후 게임 이용이 가능하도록 설정
     - MySQL 에서 연동되는 DB는 MyWeb 과 동일한 DB
 
 13. URL 객체와 Image 를 사용하여 인트로 배경화면을 gif 로 구현
 
-## 단기 목표
-1. 음악 종료 시 최고 점수 및 최고 콤보 수 출력
+14. 음악 종료 시 현재 점수 및 현재 콤보 수 출력
 
-2. 음악 종료 시 로그인한 아이디로 GAME DB 에 최고 점수 및 콤보 저장
+15. 음악 종료 시 로그인한 사용자로 점수 및 콤보 저장
+
+## 단기 목표
+
 
 ## 앞으로의 목표 - 장기
 

@@ -342,7 +342,7 @@ public class Game extends Thread {
         dropNote();
     }
 
-    public void Close() {
+    public void close() {
         // 게임 음악 종료
         gameMusic.close();
         // 스레드 종료
@@ -528,5 +528,6 @@ public class Game extends Thread {
     public Music musicTime(){
         return gameMusic;
     }
+
 }
 

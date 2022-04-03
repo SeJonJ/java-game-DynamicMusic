@@ -1,14 +1,15 @@
 package DynamicMusic;
 
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Timer;
 import java.util.TimerTask;
 
 public class DynamicMusic extends JFrame {
@@ -89,8 +90,6 @@ public class DynamicMusic extends JFrame {
     private JButton backButton = new JButton(backButtonBasic);
     private JButton noteWriteButton = new JButton(noteWriteMod);
 
-
-
     // 윈도우 창 위치를 메뉴바를 끌어서 옮길 수 있도록 마우스 좌표 int
     private int MouseX, MouseY;
 
@@ -121,12 +120,16 @@ public class DynamicMusic extends JFrame {
     // static 으로 만들어줌
     public static Game game;
 
-    // LoginDB 클래스
-    LoginDB loginDB;
+    // 최종 점수 화면
+//    private Image scoreResult = new ImageIcon(getClass().getResource("/menu_images/scoreResult.png")).getImage();
+    private boolean isResult = false;
+    scoreResult scoreResult;
 
+    // LoginDAO 클래스
+    LoginDAO loginDAO;
 
-    public DynamicMusic(LoginDB loginDB){
-        this.loginDB = loginDB;
+    public DynamicMusic(LoginDAO loginDAO){
+        this.loginDAO = loginDAO;
     }
 
     public void musicStart() {
@@ -137,7 +140,7 @@ public class DynamicMusic extends JFrame {
                 "DAYBREAK_FRONTLINE_selected.mp3",
                 "DAYBREAK_FRONTLINE.mp3",
                 "DAYBREAK FRONTLINE",
-                230000));
+                214000));
 
         trackList.add(new Track("Eminem_Lose_Yourself_title.jpg",
                 "Eminem_Lose_Yourself_menu.jpg",
@@ -145,7 +148,7 @@ public class DynamicMusic extends JFrame {
                 "Eminem_Lose_Yourself_selected.mp3",
                 "Eminem_Lose_Yourself.mp3",
                 "Lose Yourself - Eminem",
-                230000));
+                323000));
 
         trackList.add(new Track("TheFatRat - The Calling_title.png",
                 "TheFatRat - The Calling_menu.jpg",
@@ -153,7 +156,8 @@ public class DynamicMusic extends JFrame {
                 "TheFatRat - The Calling_selected.mp3",
                 "TheFatRat - The Calling.mp3",
                 "TheFatRat - The Calling",
-                230000));
+                234000));
+
 
         setUndecorated(true); // 기본 메뉴바 삭제
         setTitle("Dynamic Music");
@@ -418,6 +422,7 @@ public class DynamicMusic extends JFrame {
 
         add(menuBar); // JFrame 에 메뉴바 추가
 
+
     }
 
     // paint 메서드는 JFrame 에서 상속받아서 화면을 그릴때 가장 먼저 실행되는 함수
@@ -454,7 +459,7 @@ public class DynamicMusic extends JFrame {
             // 현재 로그인 정보 가져오기
             g.setColor(Color.GREEN);
             g.setFont(new Font("Arial", Font.BOLD, 40));
-            g.drawString("Welcome "+loginDB.getGetID(), 880,180);
+            g.drawString("Welcome "+ loginDAO.getGetID(), 880,180);
         }
 
         // isMainScreen = true 면 selectedImage 를 보여줌
@@ -467,10 +472,12 @@ public class DynamicMusic extends JFrame {
         // ingame 에 관한 그래픽 내용은 Game 클래스에서 관리
         if(isGameScreen){
             game.screenDraw(g);
-            // 시간되면 게임 종료
-//            if(game.musicTime().getTime() == 10000){
-//                bakMain();
-//            }
+        }
+
+        // 결과가 true 면 화면 출력
+        if(isResult){
+            scoreResult = new scoreResult(g);
+            scoreResult.start();
         }
 
         // paintComponents 는 이미지를 단순히 그려주는 것 이외에 JLabel 처럼 추가된 요소를 그리는 것
@@ -499,7 +506,6 @@ public class DynamicMusic extends JFrame {
         selectedImage = new ImageIcon(getClass().getResource("/game_images/" +
                 trackList.get(nowSelected).getMenuImage())).getImage();
 
-
         selectedMusic = new Music(trackList.get(nowSelected).getSelectMusic(), true, "game");
         selectedMusic.start();
     }
@@ -510,7 +516,10 @@ public class DynamicMusic extends JFrame {
         quitButton.setVisible(false);
 
         // 여기는 게임 메인 화면에 들어갔을 때 배경화면
-        introBackground = new ImageIcon(getClass().getResource("/menu_images/main_Bakground.jpg")).getImage();
+//        introBackground = new ImageIcon(getClass().getResource("/menu_images/main_Bakground.jpg")).getImage();
+        bakgroundGIF = getClass().getResource("/menu_images/main_background.gif");
+        introBackground = new ImageIcon(bakgroundGIF).getImage();
+
 
         // 게임 시작을 누르면 isMainScreen 을 true 로, titleScreen 은 false 로
         isMainScreen = true;
@@ -527,8 +536,11 @@ public class DynamicMusic extends JFrame {
         // nowselected 번째 index 재생
         selectTrack(0);
 
+        // 음악 전체 점수
+
         // 인트로 음악 종료
         Intromusic.close();
+
     }
 
     // 왼쪽 버튼 메서드
@@ -581,6 +593,9 @@ public class DynamicMusic extends JFrame {
         easyButton.setVisible(false);
         hardButton.setVisible(false);
 
+        // 음악 전체 점수
+
+
         // 뒤로 돌아가기 버튼
         backButton.setVisible(true);
 
@@ -597,14 +612,26 @@ public class DynamicMusic extends JFrame {
         game.score = 0;
         game.combo = 0;
 
-        // 타이머를 이용한 게임 결과 출력
-//        Timer timer = new Timer();
-//        TimerTask timerTask = new TimerTask() {
-//            @Override
-//            public void run() {
-//
-//            }
-//        }
+
+            // 시간에 따른 작업은 Timer, Timertask 를 통해서 가능
+            // TimerTask 를 통해서 작업을 run 메소드 안에 작업 정의 한 후
+            // timer.schedule 메소드에 매개변수를 2개 넣는데, task 와 task 를 실행할 시간
+            // 이때 schedule 의 시간 매개변수가 5000 이라면 5초 뒤 실행 이라는 의미
+            java.util.Timer timer = new Timer();
+
+            TimerTask task = new TimerTask() {
+                @Override
+                public void run() {
+                    isResult = true;
+
+                    loginDAO.scoreUpdate(game.score, game.combo, trackList.get(nowSelected).getTitleName());
+//                    System.out.println("Insert data");
+
+                }
+            };
+
+            // 234000 ms 후에 run 메소드 실행
+            timer.schedule(task, trackList.get(nowSelected).getMusicTime());
 
         // 키보드 이벤트 동작을 위한 메서드
         // 이는 Main 클래스에 포커스가 맞춰져있어야 키보드 이벤트가 정상적으로 동작하기 때문
@@ -616,6 +643,11 @@ public class DynamicMusic extends JFrame {
         // 메인 화면일때는 isMainScreen 이 true, GameScreen 은 false
         isMainScreen = true;
         isGameScreen = false;
+//        isResult = false;
+//
+//        if(!isResult && ){
+//            scoreResult.close();
+//        }
 
 
         // 메인화면으로 돌아오면 다시 버튼 보이게
@@ -626,6 +658,8 @@ public class DynamicMusic extends JFrame {
 
         // 뒤로 돌아가기 버튼
         backButton.setVisible(false);
+
+        // 음악 전체 점수
 
         // 노트 찍기 버튼
         if(Game.noteMaker){
@@ -639,7 +673,7 @@ public class DynamicMusic extends JFrame {
         introBackground = new ImageIcon(getClass().getResource("/menu_images/main_Bakground.jpg")).getImage();
 
         // 메뉴로 돌아왔을 때 게임 종료
-        game.Close();
+        game.close();
     }
 }
 
