@@ -254,7 +254,7 @@ public class DynamicMusic extends JFrame {
 
         // 왼쪽 이동 버튼
         leftButton.setVisible(false);
-        leftButton.setBounds(100, 310, 60, 60);
+        leftButton.setBounds(80, 310, 60, 60);
         leftButton.setBorderPainted(false);
         leftButton.setContentAreaFilled(false);
         leftButton.setFocusPainted(false);
@@ -279,7 +279,7 @@ public class DynamicMusic extends JFrame {
 
         // 오른쪽 이동 버튼 : 시작햇을 때는 왼쪽, 오른쪽 버튼은 보일 필요가 없음 =>setVisble(false)
         rightButton.setVisible(false);
-        rightButton.setBounds(leftButton.getX()+780, 310, 60, 60);
+        rightButton.setBounds(leftButton.getX()+750, 310, 60, 60);
         rightButton.setBorderPainted(false);
         rightButton.setContentAreaFilled(false);
         rightButton.setFocusPainted(false);
@@ -305,7 +305,7 @@ public class DynamicMusic extends JFrame {
         // easy 난이도 버튼
         // 시작화면에서는 난이도버튼 보일 필요 없음
         easyButton.setVisible(false);
-        easyButton.setBounds(230, 580, 250, 67);
+        easyButton.setBounds(170, 580, 250, 67);
         easyButton.setBorderPainted(false);
         easyButton.setContentAreaFilled(false);
         easyButton.setFocusPainted(false);
@@ -464,8 +464,9 @@ public class DynamicMusic extends JFrame {
 
         // isMainScreen = true 면 selectedImage 를 보여줌
         if (isMainScreen) {
-            g.drawImage(selectedImage, 200, 100, null);
-            g.drawImage(titleImage, 210, 85, null);
+            g.drawImage(selectedImage, 160, 100, null);
+            g.drawImage(titleImage, 170, 85, null);
+            scorePanel(g, trackList.get(nowSelected).getTitleName());
         }
 
         // isGameScreen = true 인게임 화면에서의 그래픽
@@ -643,11 +644,11 @@ public class DynamicMusic extends JFrame {
         // 메인 화면일때는 isMainScreen 이 true, GameScreen 은 false
         isMainScreen = true;
         isGameScreen = false;
-//        isResult = false;
-//
-//        if(!isResult && ){
-//            scoreResult.close();
-//        }
+        isResult = false;
+
+        if(!isResult && scoreResult != null){
+            scoreResult.close();
+        }
 
 
         // 메인화면으로 돌아오면 다시 버튼 보이게
@@ -674,6 +675,40 @@ public class DynamicMusic extends JFrame {
 
         // 메뉴로 돌아왔을 때 게임 종료
         game.close();
+    }
+
+    private void scorePanel(Graphics2D g, String musicName){
+        ArrayList<UserVO> user = loginDAO.scorePanel(musicName);
+
+        // 색깔 ,폰트 정의
+        g.setFont(new Font("Castellar",Font.BOLD, 50));
+        g.setColor(Color.green);
+        g.drawString("SCORE BOARD", 820, 200);
+
+        g.setFont(new Font("Blackadder ITC",Font.BOLD, 60));
+        g.setColor(Color.cyan);
+        int high = 250;
+        if(musicName.equals("DAYBREAK FRONTLINE")){
+
+            for(int i=0; i<5; i++, high+=50) {
+                g.drawString(user.get(i).getName(), 900, high);
+
+                g.drawString(String.valueOf(user.get(i).getScoreDF()), 1150, high);
+            }
+        }else if(musicName.equals("Lose Yourself - Eminem")){
+
+            for(int i=0; i<5; i++, high+=50) {
+                g.drawString(user.get(i).getName(), 900, high);
+                g.drawString(String.valueOf(user.get(i).getScoreLYS()), 1150, high);
+            }
+        }else if(musicName.equals("TheFatRat - The Calling")){
+            for(int i=0; i<5; i++, high+=50) {
+                g.drawString(user.get(i).getName(), 900, high);
+                g.drawString(String.valueOf(user.get(i).getScoreTFR()), 1150, high);
+            }
+        }
+
+
     }
 }
 

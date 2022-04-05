@@ -31,6 +31,8 @@ https://www.youtube.com/playlist?list=PLRx0vPvlEmdDySO3wDqMYGKMVH4Qa4QhR
 
 9. JDBC 를 사용하여 로그인하고, 로그인 후 해당 사용자로 음악 게임 종료 시 점수를 저장할 수 있도록 함
 
+10. THREAD 를 사용하여 각 기능들을 Thread 를 통해서 개별적으로 구현 및 실행
+
 ## 진행 상황
 1. 시작 화면에서 intro 음악 재생
 
@@ -68,7 +70,7 @@ https://www.youtube.com/playlist?list=PLRx0vPvlEmdDySO3wDqMYGKMVH4Qa4QhR
 
 15. 음악 종료 시 로그인한 사용자로 점수 및 콤보 저장
 
-## 단기 목표
+16. 게임 별 SCORE BOARD 출력 : 점수 상위 5명 출력
 
 
 ## 앞으로의 목표 - 장기

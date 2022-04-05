@@ -3,6 +3,8 @@ package DynamicMusic;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class LoginFrame extends JFrame {
 
@@ -35,8 +37,14 @@ public class LoginFrame extends JFrame {
         jlbPW.setBounds(150,100,60,20);
         jp.add(jlbPW);
 
-        jtfID = new JTextField();
+        jtfID = new JTextField("ID 입력");
         jtfID.setBounds(230,50,100,20);
+        jtfID.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                jtfID.setText("");
+            }
+        });
         jp.add(jtfID);
 
         jtfPW = new JPasswordField();

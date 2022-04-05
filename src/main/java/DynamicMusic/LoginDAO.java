@@ -1,6 +1,7 @@
 package DynamicMusic;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class LoginDAO extends DB_info {
 
@@ -16,7 +17,6 @@ public class LoginDAO extends DB_info {
     // DB에서 가져온 ID PW
     private int getMemberCODE;
     private String getID;
-    private String getPW;
 
 
     public LoginDAO() {
@@ -118,7 +118,46 @@ public class LoginDAO extends DB_info {
 
     }
 
+    public ArrayList<UserVO> scorePanel(String musicName){
+        ArrayList<UserVO> list = new ArrayList<UserVO>();
 
+        try {
+            // 노래에 맞춰 SQL 변경
+            if(musicName.equals("DAYBREAK FRONTLINE")) {
+
+                sql = "SELECT M.MNAME AS NAME, D.DF_SCORE AS SCORE FROM MEMBER M NATURAL JOIN DMUSIC D ORDER BY DF_SCORE DESC LIMIT 5";
+
+            }else if(musicName.equals("Lose Yourself - Eminem")){
+
+                sql = "SELECT M.MNAME AS NAME, D.LYS_SCORE AS SCORE FROM MEMBER M NATURAL JOIN DMUSIC D ORDER BY LYS_SCORE DESC LIMIT 5";
+
+            }else if(musicName.equals("TheFatRat - The Calling")){
+
+                sql = "SELECT M.MNAME AS NAME, D.TFR_SCORE AS SCORE FROM MEMBER M NATURAL JOIN DMUSIC D ORDER BY TFR_SCORE DESC LIMIT 5";
+            }
+
+            pstmt = conn.prepareStatement(sql);
+
+            rs = pstmt.executeQuery();
+//                rs.next();
+//                System.out.println(rs.getString("D.MEMBER_CODE"));
+
+            while (rs.next()) {
+                String name = rs.getString("NAME");
+                int score = rs.getInt("SCORE");
+
+                list.add(new UserVO(name, score));
+//                System.out.println(name+" : "+score);
+            }
+
+            return list;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
 
     private void closeDB() {
         try {
@@ -158,10 +197,15 @@ public class LoginDAO extends DB_info {
         return getID;
     }
 
-//    public static void main(String[] args) {
-//        LoginDAO dao = new LoginDAO();
+    public static void main(String[] args) {
+        LoginDAO dao = new LoginDAO();
 //        dao.scoreUpdate(50,50,"DAYBREAK FRONTLINE");
-//
-//    }
+
+        ArrayList<UserVO> list = dao.scorePanel("TheFatRat - The Calling");
+        for(UserVO user : list){
+            System.out.println(user.getName() + " : "+user.getScoreTFR());
+        }
+
+    }
 
 }

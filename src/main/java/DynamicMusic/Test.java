@@ -7,24 +7,20 @@ import java.awt.*;
 
 public class Test extends JFrame {
 //    JPanel jpDF;
+    JScrollPane jp;
 
     Test(){
-
 
         setVisible(true);
         setBounds(150,150,800,600);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLayout(null);
 
-        String[] header = {"name", "score"};
+        String[] header = {"메뉴", "수량", "가격", "주문상황"};
 
         Object[][] contents = {
-                {"User", "High Score"},
-                {"super", 1110},
-                {"admin", 1500},
-                {"haha", 1200},
-                {"user1", 1600},
-                {"test", 1780}
+                {"피자", 1, "15000","배달중"},
+                {"스테이크", 2, "20000", "주문취소"}
         };
 
 //        jpDF = new JPanel();
@@ -32,16 +28,20 @@ public class Test extends JFrame {
 
         DefaultTableModel tableModel = new DefaultTableModel(contents, header);
         JTable jtb = new JTable(tableModel);
-        jtb.setFont(new Font("Blackadder ITC",Font.BOLD, 40));
-        jtb.setBounds(100,100,500,400);
-        jtb.setBackground(Color.CYAN);
-        jtb.setRowHeight(35);
+//        jtb.setFont(new Font("Blackadder ITC",Font.BOLD, 40));
+//        jtb.setBounds(100,100,500,400);
+//        jtb.setBackground(Color.CYAN);
+//        jtb.setRowHeight(35);
+
+        jp = new JScrollPane(jtb);
+        jp.setBounds(100,100,500,400);
 
 
 
 //        jpDF.add(jtb);
 //        add(jpDF);
-        add(jtb);
+//        add(jtb);
+        add(jp);
     }
 
     public static void main(String[] args) {
